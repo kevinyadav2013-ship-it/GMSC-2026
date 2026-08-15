@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -177,6 +176,27 @@ section {
     margin-top: 8px;
 }
 
+.notice {
+    max-width: 900px;
+    margin: 30px auto 0;
+    background: #fff4d6;
+    border-left: 6px solid #ffc857;
+    padding: 22px;
+    border-radius: 12px;
+    line-height: 1.6;
+}
+
+.notice-title {
+    font-size: 21px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #8a5a00;
+}
+
+.notice-text {
+    font-weight: bold;
+}
+
 .modal {
     display: none;
     position: fixed;
@@ -241,11 +261,6 @@ textarea {
     color: white;
 }
 
-.submit:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
 .success {
     display: none;
     text-align: center;
@@ -259,23 +274,6 @@ textarea {
     font-size: 25px;
     font-weight: bold;
     margin: 15px 0;
-}
-
-.notice {
-    max-width: 850px;
-    margin: 30px auto;
-    background: white;
-    border-left: 6px solid #1769e0;
-    padding: 28px;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px #10284d15;
-}
-
-.notice-email {
-    color: #1769e0;
-    font-size: 20px;
-    font-weight: bold;
-    word-break: break-word;
 }
 
 .test-box {
@@ -331,14 +329,6 @@ textarea {
     color: #c62828;
     font-weight: bold;
     margin-top: 15px;
-}
-
-.test-info {
-    background: #edf5ff;
-    border-left: 5px solid #1769e0;
-    padding: 15px;
-    border-radius: 10px;
-    margin-top: 20px;
 }
 
 footer {
@@ -483,61 +473,6 @@ Results
 </section>
 
 
-<!-- IMPORTANT REGISTRATION NOTICE -->
-
-<section id="important">
-
-<h2 class="title">
-📢 Important Information for GMSC Participants
-</h2>
-
-<div class="notice">
-
-<h3>
-📝 GMSC Test — 21 November 2026
-</h3>
-
-<p>
-<strong>Important:</strong> The GMSC test will be available
-<strong>only on 21 November 2026</strong>.
-</p>
-
-<p>
-During the test, students must write/select their answers
-on the provided GMSC test page and submit their completed
-answers through the GMSC website.
-</p>
-
-<p>
-Successfully submitted test responses will be received by
-the GMSC administration at:
-</p>
-
-<p class="notice-email">
-kevinyadav2013@gmail.com
-</p>
-
-<div class="test-warning">
-
-<strong>⚠️ Please remember your GMSC Registration Code.</strong>
-
-<br><br>
-
-You will need your registration code to access the test
-on 21 November 2026.
-
-</div>
-
-<p>
-<strong>🔒 The test cannot be accessed before
-21 November 2026.</strong>
-</p>
-
-</div>
-
-</section>
-
-
 <section id="rounds">
 
 <h2 class="title">
@@ -554,8 +489,7 @@ GMSC has two rounds.
 <div class="icon">1️⃣</div>
 <h3>Round 1</h3>
 <p>
-Students must score <strong>full marks</strong> in Round 1
-to qualify for Round 2.
+Students must score <strong>full marks</strong> in Round 1 to qualify for Round 2.
 </p>
 </div>
 
@@ -563,8 +497,7 @@ to qualify for Round 2.
 <div class="icon">2️⃣</div>
 <h3>Round 2</h3>
 <p>
-Only students who score full marks in Round 1 qualify
-for Round 2.
+Only students who score full marks in Round 1 qualify for Round 2.
 </p>
 </div>
 
@@ -572,10 +505,31 @@ for Round 2.
 <div class="icon">💵</div>
 <h3>$1,000 Award</h3>
 <p>
-Students who score full marks in both Round 1 and Round 2
-qualify for the $1,000 award, subject to official
-verification and award rules.
+Students who score full marks in both Round 1 and Round 2 qualify for the $1,000 award, subject to official verification and award rules.
 </p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- IMPORTANT NOTICE -->
+
+<section>
+
+<h2 class="title">
+📢 Important Notice
+</h2>
+
+<div class="notice">
+
+<div class="notice-title">
+IMPORTANT NOTICE FOR ALL PARTICIPANTS
+</div>
+
+<div class="notice-text">
+ALL PARTICIPANTS NEED TO WRITE THEIR ANSWERS ON A WHITE PAGE. AFTER THE TEST, SEND IT TO kevinyadav2013@gmail.com ON 21 NOVEMBER ONLY.
 </div>
 
 </div>
@@ -592,18 +546,17 @@ verification and award rules.
 </h2>
 
 <p class="subtitle">
-The test is available only on 21 November 2026.
+The GMSC test will be available ONLY on 21 November 2026.
 </p>
-
 
 <div id="testLoginArea" class="card test-box">
 
 <h3>
-🔐 Enter Registration Code
+Enter Registration Code
 </h3>
 
 <p>
-Use the GMSC registration code you received after registering.
+Use the registration code you received after registering for GMSC.
 </p>
 
 <label for="testRegistrationCode">
@@ -621,15 +574,15 @@ autocomplete="off"
 
 <strong>Important:</strong>
 
-The GMSC test is available only on
-<strong>21 November 2026</strong>.
+The test can be started ONLY on 21 November 2026.
+
+Once the test begins, leaving or switching away from the test page may automatically submit your test.
 
 </div>
 
 <button
 class="btn submit"
 type="button"
-id="startTestButton"
 onclick="beginTest()"
 >
 VERIFY CODE & START TEST →
@@ -638,7 +591,8 @@ VERIFY CODE & START TEST →
 <div
 id="testLoginMessage"
 class="test-error"
-></div>
+>
+</div>
 
 </div>
 
@@ -651,22 +605,12 @@ class="test-error"
 
 <br><br>
 
-Do not switch tabs, minimize the browser,
-or leave the test page.
-
-Leaving the test page may automatically submit
-your test.
+Do not switch tabs, minimize the browser, or leave this page.
 
 </div>
 
 
 <form id="testForm">
-
-
-<!-- TEMPORARY QUESTIONS
-     These can be replaced with your final
-     10 questions later.
--->
 
 <div class="test-question">
 
@@ -823,16 +767,6 @@ D) 12
 </div>
 
 
-<div class="test-info">
-
-<strong>📌 Notice:</strong>
-
-Write/select your answers on this page and submit
-your completed test through the GMSC website.
-
-</div>
-
-
 <button
 class="btn submit"
 type="submit"
@@ -876,8 +810,7 @@ Registration Code:
 </h2>
 
 <p class="subtitle">
-🔒 Question papers will become available on
-21 November 2026.
+🔒 Question papers will become available on 21 November 2026.
 </p>
 
 </section>
@@ -890,8 +823,7 @@ Registration Code:
 </h2>
 
 <p class="subtitle">
-GMSC 2026 results will be published on
-15 January 2027.
+GMSC 2026 results will be published on 15 January 2027.
 </p>
 
 </section>
@@ -1002,7 +934,6 @@ required
 <button
 class="btn submit"
 type="submit"
-id="registrationSubmitButton"
 >
 SUBMIT REGISTRATION
 </button>
@@ -1025,10 +956,11 @@ Your GMSC Registration Code:
 <div
 class="code"
 id="registrationCode"
-></div>
+>
+</div>
 
 <p>
-Please save this code carefully.
+Please save this code.
 </p>
 
 <button
@@ -1048,9 +980,9 @@ DONE
 
 <script>
 
-/* =========================================================
+/* =========================
    MENU
-========================================================= */
+========================= */
 
 function toggleMenu() {
 
@@ -1062,9 +994,9 @@ function toggleMenu() {
 }
 
 
-/* =========================================================
+/* =========================
    REGISTRATION MODAL
-========================================================= */
+========================= */
 
 function openModal() {
 
@@ -1086,9 +1018,9 @@ function closeModal() {
 }
 
 
-/* =========================================================
+/* =========================
    REGISTRATION
-========================================================= */
+========================= */
 
 document
     .getElementById("gmscForm")
@@ -1097,14 +1029,6 @@ document
         async function(event) {
 
             event.preventDefault();
-
-            const button =
-                document.getElementById(
-                    "registrationSubmitButton"
-                );
-
-            button.disabled = true;
-            button.textContent = "REGISTERING...";
 
             const formData =
                 new FormData(this);
@@ -1142,10 +1066,6 @@ document
                         "Registration failed."
                     );
 
-                    button.disabled = false;
-                    button.textContent =
-                        "SUBMIT REGISTRATION";
-
                     return;
                 }
 
@@ -1166,14 +1086,6 @@ document
                     .textContent =
                     result.code;
 
-                if (result.emailSent === false) {
-
-                    console.warn(
-                        "Registration saved, but notification email was not sent."
-                    );
-
-                }
-
             } catch (error) {
 
                 console.error(
@@ -1184,29 +1096,23 @@ document
                 alert(
                     "Unable to connect to the GMSC server."
                 );
-
-                button.disabled = false;
-                button.textContent =
-                    "SUBMIT REGISTRATION";
-
             }
-
         }
     );
 
 
-/* =========================================================
+/* =========================
    TEST VARIABLES
-========================================================= */
+========================= */
 
 let testStarted = false;
 let testSubmitted = false;
 let currentRegistrationCode = "";
 
 
-/* =========================================================
+/* =========================
    BEGIN TEST
-========================================================= */
+========================= */
 
 async function beginTest() {
 
@@ -1220,11 +1126,6 @@ async function beginTest() {
             "testLoginMessage"
         );
 
-    const button =
-        document.getElementById(
-            "startTestButton"
-        );
-
     const code =
         codeInput.value.trim();
 
@@ -1233,13 +1134,16 @@ async function beginTest() {
     if (!code) {
 
         message.textContent =
-            "Please enter your GMSC registration code.";
+            "Please enter your registration code.";
 
         return;
     }
 
-    button.disabled = true;
-    button.textContent = "VERIFYING...";
+    /*
+      The server checks the date.
+      The test is allowed ONLY on
+      21 November 2026.
+    */
 
     try {
 
@@ -1254,9 +1158,11 @@ async function beginTest() {
                             "application/json"
                     },
 
-                    body: JSON.stringify({
-                        registration_code: code
-                    })
+                    body:
+                        JSON.stringify({
+                            registration_code:
+                                code
+                        })
                 }
             );
 
@@ -1268,22 +1174,6 @@ async function beginTest() {
             message.textContent =
                 result.error ||
                 "Test verification failed.";
-
-            button.disabled = false;
-            button.textContent =
-                "VERIFY CODE & START TEST →";
-
-            return;
-        }
-
-        if (!result.verified) {
-
-            message.textContent =
-                "Registration code could not be verified.";
-
-            button.disabled = false;
-            button.textContent =
-                "VERIFY CODE & START TEST →";
 
             return;
         }
@@ -1308,9 +1198,10 @@ async function beginTest() {
 
         window.scrollTo({
             top:
-                document
-                    .getElementById("testArea")
-                    .offsetTop - 80,
+                document.getElementById(
+                    "testArea"
+                ).offsetTop - 80,
+
             behavior: "smooth"
         });
 
@@ -1322,20 +1213,14 @@ async function beginTest() {
         );
 
         message.textContent =
-            "Unable to connect to the test server. Please try again.";
-
-        button.disabled = false;
-        button.textContent =
-            "VERIFY CODE & START TEST →";
-
+            "Unable to connect to the test server.";
     }
-
 }
 
 
-/* =========================================================
+/* =========================
    SUBMIT TEST
-========================================================= */
+========================= */
 
 async function submitTest(reason) {
 
@@ -1352,35 +1237,18 @@ async function submitTest(reason) {
         );
 
     if (
+        reason ===
+        "Student manually submitted the test."
+        &&
         !form.checkValidity()
     ) {
 
-        if (
-            reason ===
-            "Student manually submitted the test."
-        ) {
-
-            form.reportValidity();
-
-        }
+        form.reportValidity();
 
         return;
     }
 
     testSubmitted = true;
-
-    const button =
-        document.getElementById(
-            "submitTestButton"
-        );
-
-    if (button) {
-
-        button.disabled = true;
-        button.textContent =
-            "SUBMITTING...";
-
-    }
 
     const answers =
         Object.fromEntries(
@@ -1411,8 +1279,9 @@ async function submitTest(reason) {
 
                             reason:
                                 reason
+                        }),
 
-                        })
+                    keepalive: true
                 }
             );
 
@@ -1428,14 +1297,6 @@ async function submitTest(reason) {
 
             testSubmitted = false;
 
-            if (button) {
-
-                button.disabled = false;
-                button.textContent =
-                    "SUBMIT TEST";
-
-            }
-
             alert(
                 result.error ||
                 "Test submission failed."
@@ -1444,7 +1305,11 @@ async function submitTest(reason) {
             return;
         }
 
-        form.style.display = "none";
+        document
+            .getElementById(
+                "testForm"
+            )
+            .style.display = "none";
 
         document
             .getElementById(
@@ -1468,31 +1333,19 @@ async function submitTest(reason) {
 
         testSubmitted = false;
 
-        if (button) {
-
-            button.disabled = false;
-            button.textContent =
-                "SUBMIT TEST";
-
-        }
-
         alert(
-            "Unable to connect to the test server."
+            "Unable to submit the test. Please try again."
         );
-
     }
-
 }
 
 
-/* =========================================================
+/* =========================
    MANUAL TEST SUBMISSION
-========================================================= */
+========================= */
 
 document
-    .getElementById(
-        "testForm"
-    )
+    .getElementById("testForm")
     .addEventListener(
         "submit",
         async function(event) {
@@ -1507,9 +1360,9 @@ document
     );
 
 
-/* =========================================================
-   AUTOMATIC SUBMISSION IF STUDENT LEAVES
-========================================================= */
+/* =========================
+   LEAVING TEST PAGE
+========================= */
 
 document.addEventListener(
     "visibilitychange",
@@ -1520,11 +1373,6 @@ document.addEventListener(
             testStarted &&
             !testSubmitted
         ) {
-
-            /*
-              The server still controls whether
-              the test can actually be submitted.
-            */
 
             submitTest(
                 "Student left or switched away from the test page."
@@ -1539,6 +1387,4 @@ document.addEventListener(
 
 </body>
 </html>
-```
-
 
