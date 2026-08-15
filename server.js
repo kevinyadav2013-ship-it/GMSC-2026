@@ -46,7 +46,7 @@ function makeCode() {
   return "GMSC-2026-" + Math.floor(10000 + Math.random() * 90000);
 }
 
-app.post("/api/register", limiter, (req, res) => {
+app.post("/api/register", limiter, async (req, res) => {
   const student_name = clean(req.body.student_name);
   const email = clean(req.body.email);
   const mobile = clean(req.body.mobile);
