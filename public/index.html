@@ -176,25 +176,33 @@ section {
     margin-top: 8px;
 }
 
-.notice {
-    max-width: 900px;
-    margin: 30px auto 0;
+/* IMPORTANT NOTICE */
+
+.important-notice {
     background: #fff4d6;
-    border-left: 6px solid #ffc857;
-    padding: 22px;
-    border-radius: 12px;
-    line-height: 1.6;
+    border: 2px solid #ffc857;
+    border-radius: 15px;
+    padding: 25px;
+    margin: 30px auto;
+    max-width: 1000px;
+    box-shadow: 0 8px 25px #10284d15;
 }
 
-.notice-title {
-    font-size: 21px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    color: #8a5a00;
+.important-notice h2 {
+    margin-top: 0;
+    color: #9a5b00;
 }
 
-.notice-text {
+.important-notice p {
+    font-size: 18px;
+    line-height: 1.7;
+    margin-bottom: 0;
+}
+
+.email-address {
+    color: #1769e0;
     font-weight: bold;
+    word-break: break-word;
 }
 
 .modal {
@@ -224,7 +232,6 @@ section {
 .form-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
 }
 
 .close {
@@ -234,7 +241,6 @@ section {
     width: 35px;
     height: 35px;
     cursor: pointer;
-    font-size: 20px;
 }
 
 label {
@@ -405,6 +411,35 @@ REGISTER FOR GMSC →
 </section>
 
 
+<!-- IMPORTANT NOTICE -->
+
+<section>
+
+<div class="important-notice">
+
+<h2>
+⚠️ IMPORTANT NOTICE FOR ALL PARTICIPANTS
+</h2>
+
+<p>
+<strong>
+ALL PARTICIPANTS NEED TO WRITE THEIR ANSWERS ON A WHITE PAGE AFTER THE TEST.
+</strong>
+</p>
+
+<p>
+<strong>
+AFTER THE TEST, SEND YOUR WRITTEN ANSWERS TO
+<span class="email-address">gmsc22222@gmail.com</span>
+ON 21 NOVEMBER ONLY.
+</strong>
+</p>
+
+</div>
+
+</section>
+
+
 <section id="maths">
 
 <h2 class="title">
@@ -514,31 +549,6 @@ Students who score full marks in both Round 1 and Round 2 qualify for the $1,000
 </section>
 
 
-<!-- IMPORTANT NOTICE -->
-
-<section>
-
-<h2 class="title">
-📢 Important Notice
-</h2>
-
-<div class="notice">
-
-<div class="notice-title">
-IMPORTANT NOTICE FOR ALL PARTICIPANTS
-</div>
-
-<div class="notice-text">
-ALL PARTICIPANTS NEED TO WRITE THEIR ANSWERS ON A WHITE PAGE. AFTER THE TEST, SEND IT TO kevinyadav2013@gmail.com ON 21 NOVEMBER ONLY.
-</div>
-
-</div>
-
-</section>
-
-
-<!-- TEST -->
-
 <section id="test">
 
 <h2 class="title">
@@ -546,7 +556,7 @@ ALL PARTICIPANTS NEED TO WRITE THEIR ANSWERS ON A WHITE PAGE. AFTER THE TEST, SE
 </h2>
 
 <p class="subtitle">
-The GMSC test will be available ONLY on 21 November 2026.
+The GMSC test will be available <strong>ONLY ON 21 NOVEMBER 2026</strong>.
 </p>
 
 <div id="testLoginArea" class="card test-box">
@@ -574,7 +584,10 @@ autocomplete="off"
 
 <strong>Important:</strong>
 
-The test can be started ONLY on 21 November 2026.
+The test can be started only on
+<strong>21 November 2026</strong>.
+
+<br><br>
 
 Once the test begins, leaving or switching away from the test page may automatically submit your test.
 
@@ -606,6 +619,8 @@ class="test-error"
 <br><br>
 
 Do not switch tabs, minimize the browser, or leave this page.
+
+Leaving the test page may automatically submit your test.
 
 </div>
 
@@ -796,6 +811,12 @@ Registration Code:
 <strong id="submittedCode"></strong>
 </p>
 
+<p>
+Remember to write your answers on a white page and send them to
+<strong>gmsc22222@gmail.com</strong>
+on 21 November only.
+</p>
+
 </div>
 
 </div>
@@ -842,8 +863,6 @@ Think Globally. Solve Brilliantly.
 </footer>
 
 
-<!-- REGISTRATION MODAL -->
-
 <div class="modal" id="modal">
 
 <div class="form-box">
@@ -878,7 +897,6 @@ name="student_name"
 required
 >
 
-
 <label>
 Email Address
 </label>
@@ -888,7 +906,6 @@ name="email"
 type="email"
 required
 >
-
 
 <label>
 Mobile Number
@@ -900,7 +917,6 @@ type="tel"
 required
 >
 
-
 <label>
 Class
 </label>
@@ -911,15 +927,14 @@ Class
 Select Class
 </option>
 
-<option value="7">7</option>
-<option value="8">8</option>
-<option value="9">9</option>
-<option value="10">10</option>
-<option value="11">11</option>
-<option value="12">12</option>
+<option>7</option>
+<option>8</option>
+<option>9</option>
+<option>10</option>
+<option>11</option>
+<option>12</option>
 
 </select>
-
 
 <label>
 Father's Name
@@ -929,7 +944,6 @@ Father's Name
 name="father_name"
 required
 >
-
 
 <button
 class="btn submit"
@@ -980,10 +994,6 @@ DONE
 
 <script>
 
-/* =========================
-   MENU
-========================= */
-
 function toggleMenu() {
 
     document
@@ -993,10 +1003,6 @@ function toggleMenu() {
 
 }
 
-
-/* =========================
-   REGISTRATION MODAL
-========================= */
 
 function openModal() {
 
@@ -1088,21 +1094,20 @@ document
 
             } catch (error) {
 
-                console.error(
-                    "Registration error:",
-                    error
-                );
+                console.error(error);
 
                 alert(
                     "Unable to connect to the GMSC server."
                 );
+
             }
+
         }
     );
 
 
 /* =========================
-   TEST VARIABLES
+   TEST
 ========================= */
 
 let testStarted = false;
@@ -1110,20 +1115,16 @@ let testSubmitted = false;
 let currentRegistrationCode = "";
 
 
-/* =========================
-   BEGIN TEST
-========================= */
-
 async function beginTest() {
-
-    const codeInput =
-        document.getElementById(
-            "testRegistrationCode"
-        );
 
     const message =
         document.getElementById(
             "testLoginMessage"
+        );
+
+    const codeInput =
+        document.getElementById(
+            "testRegistrationCode"
         );
 
     const code =
@@ -1138,12 +1139,6 @@ async function beginTest() {
 
         return;
     }
-
-    /*
-      The server checks the date.
-      The test is allowed ONLY on
-      21 November 2026.
-    */
 
     try {
 
@@ -1196,14 +1191,7 @@ async function beginTest() {
             )
             .style.display = "block";
 
-        window.scrollTo({
-            top:
-                document.getElementById(
-                    "testArea"
-                ).offsetTop - 80,
-
-            behavior: "smooth"
-        });
+        window.location.hash = "test";
 
     } catch (error) {
 
@@ -1214,12 +1202,14 @@ async function beginTest() {
 
         message.textContent =
             "Unable to connect to the test server.";
+
     }
+
 }
 
 
 /* =========================
-   SUBMIT TEST
+   TEST SUBMISSION
 ========================= */
 
 async function submitTest(reason) {
@@ -1236,14 +1226,16 @@ async function submitTest(reason) {
             "testForm"
         );
 
-    if (
-        reason ===
-        "Student manually submitted the test."
-        &&
-        !form.checkValidity()
-    ) {
+    if (!form.checkValidity()) {
 
-        form.reportValidity();
+        if (
+            reason ===
+            "Student manually submitted the test."
+        ) {
+
+            form.reportValidity();
+
+        }
 
         return;
     }
@@ -1279,6 +1271,7 @@ async function submitTest(reason) {
 
                             reason:
                                 reason
+
                         }),
 
                     keepalive: true
@@ -1305,11 +1298,7 @@ async function submitTest(reason) {
             return;
         }
 
-        document
-            .getElementById(
-                "testForm"
-            )
-            .style.display = "none";
+        form.style.display = "none";
 
         document
             .getElementById(
@@ -1336,13 +1325,11 @@ async function submitTest(reason) {
         alert(
             "Unable to submit the test. Please try again."
         );
+
     }
+
 }
 
-
-/* =========================
-   MANUAL TEST SUBMISSION
-========================= */
 
 document
     .getElementById("testForm")
@@ -1360,16 +1347,18 @@ document
     );
 
 
-/* =========================
-   LEAVING TEST PAGE
-========================= */
+/*
+  Automatically submit if the student
+  leaves the test page.
+*/
 
 document.addEventListener(
     "visibilitychange",
     function() {
 
         if (
-            document.visibilityState === "hidden" &&
+            document.visibilityState ===
+                "hidden" &&
             testStarted &&
             !testSubmitted
         ) {
