@@ -7,24 +7,43 @@ import Database from "better-sqlite3";
 
 const app = express();
 
+/* =========================
+   EMAIL
+========================= */
+
 const transporter = nodemailer.createTransport({
   service: "gmail",
+
   auth: {
     user: process.env.GMSC_EMAIL,
     pass: process.env.GMSC_EMAIL_PASSWORD
-  }
+  },
+
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 10000
 });
+
+/* =========================
+   SERVER
+========================= */
 
 app.set("trust proxy", 1);
 
 const db = new Database("gmsc.sqlite");
 
-app.use(helmet({ contentSecurityPolicy: false }));
+app.use(
+  helmet({
+    contentSecurityPolicy: false
+  })
+);
+
 app.use(express.json());
+
 app.use(express.static("public"));
 
 /* =========================
-   DATABASE TABLES
+   DATABASE
 ========================= */
 
 db.exec(`
@@ -49,7 +68,7 @@ CREATE TABLE IF NOT EXISTS test_submissions (
 `);
 
 /* =========================
-   RATE LIMITER
+   RATE LIMIT
 ========================= */
 
 const limiter = rateLimit({
@@ -64,7 +83,9 @@ const limiter = rateLimit({
 ========================= */
 
 function clean(value) {
-  return String(value || "").trim().slice(0, 120);
+  return String(value || "")
+    .trim()
+    .slice(0, 120);
 }
 
 function makeCode() {
@@ -74,163 +95,264 @@ function makeCode() {
   );
 }
 
+function isTestOpen() {
+  const now = new Date();
+
+  const testStart = new Date(
+    "2026-11-21T00:00:00+05:30"
+  );
+
+  return now >= testStart;
+}
+
 /* =========================
    REGISTRATION
 ========================= */
 
-app.post("/api/register", limiter, async (req, res) => {
-  const student_name = clean(req.body.student_name);
-  const email = clean(req.body.email);
-  const mobile = clean(req.body.mobile);
-  const className = clean(req.body.class);
-  const father_name = clean(req.body.father_name);
+app.post(
+  "/api/register",
+  limiter,
+  (req, res) => {
 
-  if (
-    !student_name ||
-    !email ||
-    !mobile ||
-    !father_name ||
-    !["7", "8", "9", "10", "11", "12"].includes(className)
-  ) {
-    return res.status(400).json({
-      error: "Please enter all required information."
-    });
-  }
+    const student_name =
+      clean(req.body.student_name);
 
-  const deadline =
-    new Date("2026-10-31T23:59:59+05:30");
+    const email =
+      clean(req.body.email);
 
-  if (new Date() > deadline) {
-    return res.status(403).json({
-      error: "GMSC registration is closed."
-    });
-  }
+    const mobile =
+      clean(req.body.mobile);
 
-  let code;
+    const className =
+      clean(req.body.class);
 
-  while (true) {
-    code = makeCode();
+    const father_name =
+      clean(req.body.father_name);
 
-    try {
-      db.prepare(`
-        INSERT INTO registrations
-        (
+    if (
+      !student_name ||
+      !email ||
+      !mobile ||
+      !father_name ||
+      !["7", "8", "9", "10", "11", "12"]
+        .includes(className)
+    ) {
+      return res.status(400).json({
+        error:
+          "Please enter all required information."
+      });
+    }
+
+    const deadline =
+      new Date(
+        "2026-10-31T23:59:59+05:30"
+      );
+
+    if (new Date() > deadline) {
+
+      return res.status(403).json({
+        error:
+          "GMSC registration is closed."
+      });
+
+    }
+
+    let code;
+
+    while (true) {
+
+      code = makeCode();
+
+      try {
+
+        db.prepare(`
+          INSERT INTO registrations
+          (
+            code,
+            student_name,
+            email,
+            mobile,
+            class,
+            father_name,
+            created_at
+          )
+          VALUES (?, ?, ?, ?, ?, ?, ?)
+        `).run(
           code,
           student_name,
           email,
           mobile,
-          class,
+          className,
           father_name,
-          created_at
-        )
-        VALUES (?, ?, ?, ?, ?, ?, ?)
-      `).run(
-        code,
-        student_name,
-        email,
-        mobile,
-        className,
-        father_name,
-        new Date().toISOString()
-      );
+          new Date().toISOString()
+        );
 
-      break;
-    } catch (error) {
-      if (!String(error.message).includes("UNIQUE")) {
+        break;
+
+      } catch (error) {
+
+        if (
+          !String(error.message)
+            .includes("UNIQUE")
+        ) {
+
+          console.error(
+            "Registration database error:",
+            error
+          );
+
+          return res.status(500).json({
+            error:
+              "Registration could not be completed."
+          });
+
+        }
+
+      }
+
+    }
+
+    /*
+      IMPORTANT:
+      Send the code to the browser immediately.
+      Do NOT wait for Gmail.
+    */
+
+    res.status(201).json({
+      success: true,
+      code: code
+    });
+
+    /*
+      Email runs in the background.
+    */
+
+    transporter
+      .sendMail({
+        from: process.env.GMSC_EMAIL,
+
+        to: "kevinyadav2013@gmail.com",
+
+        subject:
+          `New GMSC Registration - ${code}`,
+
+        text: `
+New GMSC registration received.
+
+Registration Code:
+${code}
+
+Student Name:
+${student_name}
+
+Student Email:
+${email}
+
+Mobile:
+${mobile}
+
+Class:
+${className}
+
+Father's Name:
+${father_name}
+`
+      })
+      .then(() => {
+
+        console.log(
+          "Registration email sent successfully."
+        );
+
+      })
+      .catch((error) => {
+
         console.error(
-          "Registration database error:",
+          "Registration email failed:",
           error
         );
 
-        return res.status(500).json({
-          error:
-            "Registration could not be completed."
-        });
-      }
-    }
+      });
+
   }
-
-  /*
-    Send registration notification to your email.
-    Email failure does NOT cancel registration.
-  */
-
-  try {
-    await transporter.sendMail({
-      from: process.env.GMSC_EMAIL,
-      to: "kevinyadav2013@gmail.com",
-      subject:
-        `New GMSC Registration - ${code}`,
-      text: `
-New GMSC registration received.
-
-Registration Code: ${code}
-
-Student Name: ${student_name}
-Student Email: ${email}
-Mobile: ${mobile}
-Class: ${className}
-Father's Name: ${father_name}
-`
-    });
-
-    console.log(
-      "Registration email sent successfully."
-    );
-  } catch (error) {
-    console.error(
-      "Registration email failed:",
-      error
-    );
-  }
-
-  return res.status(201).json({
-    code: code
-  });
-});
+);
 
 /* =========================
-   VERIFY TEST REGISTRATION
+   TEST VERIFICATION
 ========================= */
 
-app.post("/api/test/verify", limiter, (req, res) => {
-  const registration_code =
-    clean(req.body.registration_code);
+app.post(
+  "/api/test/verify",
+  limiter,
+  (req, res) => {
 
-  if (!registration_code) {
-    return res.status(400).json({
-      error:
-        "Registration code is required."
+    /*
+      TEST IS NOT AVAILABLE BEFORE
+      21 NOVEMBER 2026.
+    */
+
+    if (!isTestOpen()) {
+
+      return res.status(403).json({
+        error:
+          "The GMSC test will open on 21 November 2026."
+      });
+
+    }
+
+    const registration_code =
+      clean(
+        req.body.registration_code
+      );
+
+    if (!registration_code) {
+
+      return res.status(400).json({
+        error:
+          "Registration code is required."
+      });
+
+    }
+
+    const registration =
+      db.prepare(`
+        SELECT
+          code,
+          student_name,
+          email,
+          class
+        FROM registrations
+        WHERE code = ?
+      `).get(
+        registration_code
+      );
+
+    if (!registration) {
+
+      return res.status(403).json({
+        error:
+          "Invalid registration code."
+      });
+
+    }
+
+    return res.json({
+
+      verified: true,
+
+      registrationCode:
+        registration.code,
+
+      studentName:
+        registration.student_name,
+
+      class:
+        registration.class
+
     });
+
   }
-
-  const registration = db.prepare(`
-    SELECT
-      code,
-      student_name,
-      email,
-      class
-    FROM registrations
-    WHERE code = ?
-  `).get(registration_code);
-
-  if (!registration) {
-    return res.status(403).json({
-      error:
-        "Invalid registration code."
-    });
-  }
-
-  return res.json({
-    verified: true,
-    registrationCode:
-      registration.code,
-    studentName:
-      registration.student_name,
-    class:
-      registration.class
-  });
-});
+);
 
 /* =========================
    TEST SUBMISSION
@@ -239,10 +361,25 @@ app.post("/api/test/verify", limiter, (req, res) => {
 app.post(
   "/api/test/submit",
   limiter,
-  async (req, res) => {
+  (req, res) => {
+
+    /*
+      TEST MUST BE OPEN.
+    */
+
+    if (!isTestOpen()) {
+
+      return res.status(403).json({
+        error:
+          "The GMSC test will open on 21 November 2026."
+      });
+
+    }
 
     const registration_code =
-      clean(req.body.registration_code);
+      clean(
+        req.body.registration_code
+      );
 
     const answers =
       req.body.answers || {};
@@ -254,27 +391,34 @@ app.post(
       );
 
     if (!registration_code) {
+
       return res.status(400).json({
         error:
           "Registration code is required."
       });
+
     }
 
-    const registration = db.prepare(`
-      SELECT
-        code,
-        student_name,
-        email,
-        class
-      FROM registrations
-      WHERE code = ?
-    `).get(registration_code);
+    const registration =
+      db.prepare(`
+        SELECT
+          code,
+          student_name,
+          email,
+          class
+        FROM registrations
+        WHERE code = ?
+      `).get(
+        registration_code
+      );
 
     if (!registration) {
+
       return res.status(403).json({
         error:
           "Invalid registration code."
       });
+
     }
 
     try {
@@ -295,15 +439,34 @@ app.post(
         new Date().toISOString()
       );
 
-      try {
+      /*
+        Respond immediately.
+      */
 
-        await transporter.sendMail({
-          from: process.env.GMSC_EMAIL,
-          to: "kevinyadav2013@gmail.com",
+      res.status(201).json({
+        success: true,
+        message:
+          "Test submitted successfully."
+      });
+
+      /*
+        Email in background.
+      */
+
+      transporter
+        .sendMail({
+
+          from:
+            process.env.GMSC_EMAIL,
+
+          to:
+            "kevinyadav2013@gmail.com",
+
           subject:
             `GMSC Test Submission - ${registration_code}`,
+
           text: `
-New GMSC test submission received.
+New GMSC test submission.
 
 Registration Code:
 ${registration_code}
@@ -321,29 +484,34 @@ Reason:
 ${reason}
 
 Answers:
-${JSON.stringify(answers, null, 2)}
+${JSON.stringify(
+  answers,
+  null,
+  2
+)}
 `
+
+        })
+        .then(() => {
+
+          console.log(
+            "Test submission email sent."
+          );
+
+        })
+        .catch((error) => {
+
+          console.error(
+            "Test submission email failed:",
+            error
+          );
+
         });
-
-      } catch (emailError) {
-
-        console.error(
-          "Test submission email failed:",
-          emailError
-        );
-
-      }
-
-      return res.status(201).json({
-        success: true,
-        message:
-          "Test submitted successfully."
-      });
 
     } catch (error) {
 
       console.error(
-        "Test submission error:",
+        "Test database error:",
         error
       );
 
@@ -351,7 +519,9 @@ ${JSON.stringify(answers, null, 2)}
         error:
           "Test submission could not be completed."
       });
+
     }
+
   }
 );
 
@@ -359,61 +529,80 @@ ${JSON.stringify(answers, null, 2)}
    STATUS
 ========================= */
 
-app.get("/api/status", (req, res) => {
+app.get(
+  "/api/status",
+  (req, res) => {
 
-  const now = new Date();
+    const now =
+      new Date();
 
-  res.json({
-
-    registrationOpen:
+    const registrationOpen =
       now <=
       new Date(
         "2026-10-31T23:59:59+05:30"
-      ),
+      );
 
-    questionPapersAvailable:
+    const testOpen =
       now >=
       new Date(
         "2026-11-21T00:00:00+05:30"
-      ),
+      );
 
-    resultsAvailable:
+    const resultsAvailable =
       now >=
       new Date(
         "2027-01-15T00:00:00+05:30"
-      )
+      );
 
-  });
+    res.json({
 
-});
+      registrationOpen,
+
+      testOpen,
+
+      questionPapersAvailable:
+        testOpen,
+
+      resultsAvailable
+
+    });
+
+  }
+);
 
 /* =========================
    HOME PAGE
 ========================= */
 
-const PORT =
-  process.env.PORT || 3000;
+app.get(
+  "/",
+  (req, res) => {
 
-app.get("/", (req, res) => {
+    res.sendFile(
+      "index.html",
+      {
+        root: "public"
+      }
+    );
 
-  res.sendFile(
-    "index.html",
-    {
-      root: "public"
-    }
-  );
-
-});
+  }
+);
 
 /* =========================
    START SERVER
 ========================= */
 
-app.listen(PORT, () => {
+const PORT =
+  process.env.PORT || 3000;
 
-  console.log(
-    `GMSC server running on port ${PORT}`
-  );
+app.listen(
+  PORT,
+  () => {
 
-});
+    console.log(
+      `GMSC server running on port ${PORT}`
+    );
+
+  }
+);
 
