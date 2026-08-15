@@ -316,6 +316,12 @@ textarea {
     margin-top: 15px;
 }
 
+.test-info {
+    color: #1769e0;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
 footer {
     background: #07152f;
     color: #b8c5da;
@@ -367,7 +373,6 @@ GMSC <span>GLOBAL MATHS & SCIENCE COMPETITION</span>
 
 </header>
 
-
 <section class="hero">
 
 <div class="hero-content">
@@ -398,7 +403,6 @@ REGISTER FOR GMSC →
 
 </section>
 
-
 <section id="maths">
 
 <h2 class="title">
@@ -425,7 +429,6 @@ Mathematics
 
 </div>
 
-
 <div class="card" id="science">
 
 <div class="icon">🔬</div>
@@ -439,7 +442,6 @@ Scientific thinking and problem solving.
 </p>
 
 </div>
-
 
 <div class="card">
 
@@ -459,7 +461,6 @@ Students from Classes 7 to 12.
 
 </section>
 
-
 <section class="schedule">
 
 <h2 class="title">
@@ -469,52 +470,28 @@ GMSC 2026 Schedule
 <div class="dates">
 
 <div class="date">
-
 Registration Opens
-
-<strong>
-30 June 2026
-</strong>
-
+<strong>30 June 2026</strong>
 </div>
 
-
 <div class="date">
-
 Registration Deadline
-
-<strong>
-31 October 2026
-</strong>
-
+<strong>31 October 2026</strong>
 </div>
 
-
 <div class="date">
-
 Exam
-
-<strong>
-21 November 2026
-</strong>
-
+<strong>21 November 2026</strong>
 </div>
 
-
 <div class="date">
-
 Results
-
-<strong>
-15 January 2027
-</strong>
-
+<strong>15 January 2027</strong>
 </div>
 
 </div>
 
 </section>
-
 
 <section id="rounds">
 
@@ -544,7 +521,6 @@ Students must score <strong>full marks</strong> in Round 1 to qualify for Round 
 
 </div>
 
-
 <div class="card">
 
 <div class="icon">
@@ -560,7 +536,6 @@ Only students who score full marks in Round 1 qualify for Round 2.
 </p>
 
 </div>
-
 
 <div class="card">
 
@@ -582,7 +557,6 @@ Students who score full marks in both Round 1 and Round 2 qualify for the $1,000
 
 </section>
 
-
 <section id="test">
 
 <h2 class="title">
@@ -592,7 +566,6 @@ Students who score full marks in both Round 1 and Round 2 qualify for the $1,000
 <p class="subtitle">
 Enter your GMSC Registration Code to access your test.
 </p>
-
 
 <div id="testLoginArea" class="card test-box">
 
@@ -627,6 +600,7 @@ Once the test begins, leaving or switching away from this test page will automat
 class="btn submit"
 type="button"
 onclick="beginTest()"
+id="startTestButton"
 >
 VERIFY CODE & START TEST →
 </button>
@@ -639,10 +613,9 @@ class="test-error"
 
 </div>
 
-
 <div id="testArea" class="test-area test-box">
 
-<div class="test-warning">
+<div class="test-warning" id="testWarning">
 
 <strong>⚠️ TEST IN PROGRESS</strong>
 
@@ -654,9 +627,7 @@ Leaving the test page will automatically submit your test.
 
 </div>
 
-
 <form id="testForm">
-
 
 <div class="test-question">
 
@@ -690,7 +661,6 @@ D) 39
 
 </div>
 
-
 <div class="test-question">
 
 <h3>
@@ -722,7 +692,6 @@ D) 112
 </label>
 
 </div>
-
 
 <div class="test-question">
 
@@ -756,7 +725,6 @@ D) Hydrogen
 
 </div>
 
-
 <div class="test-question">
 
 <h3>
@@ -788,7 +756,6 @@ D) Pascal
 </label>
 
 </div>
-
 
 <div class="test-question">
 
@@ -822,7 +789,6 @@ D) 12
 
 </div>
 
-
 <button
 class="btn submit"
 type="submit"
@@ -832,7 +798,6 @@ SUBMIT TEST
 </button>
 
 </form>
-
 
 <div
 id="testSuccess"
@@ -858,7 +823,6 @@ Registration Code:
 
 </section>
 
-
 <section id="papers">
 
 <h2 class="title">
@@ -870,7 +834,6 @@ Registration Code:
 </p>
 
 </section>
-
 
 <section id="results">
 
@@ -884,7 +847,6 @@ GMSC 2026 results will be published on 15 January 2027.
 
 </section>
 
-
 <footer>
 
 <div class="footer-title">
@@ -896,7 +858,6 @@ Think Globally. Solve Brilliantly.
 </p>
 
 </footer>
-
 
 <div class="modal" id="modal">
 
@@ -920,7 +881,6 @@ type="button"
 
 </div>
 
-
 <form id="gmscForm">
 
 <label>
@@ -932,7 +892,6 @@ name="student_name"
 required
 >
 
-
 <label>
 Email Address
 </label>
@@ -943,7 +902,6 @@ type="email"
 required
 >
 
-
 <label>
 Mobile Number
 </label>
@@ -953,7 +911,6 @@ name="mobile"
 type="tel"
 required
 >
-
 
 <label>
 Class
@@ -974,7 +931,6 @@ Select Class
 
 </select>
 
-
 <label>
 Father's Name
 </label>
@@ -983,7 +939,6 @@ Father's Name
 name="father_name"
 required
 >
-
 
 <button
 class="btn submit"
@@ -995,7 +950,6 @@ SUBMIT REGISTRATION
 </form>
 
 </div>
-
 
 <div class="success" id="success">
 
@@ -1031,7 +985,6 @@ DONE
 
 </div>
 
-
 <script>
 
 function toggleMenu() {
@@ -1043,7 +996,6 @@ function toggleMenu() {
 
 }
 
-
 function openModal() {
 
     document
@@ -1052,7 +1004,6 @@ function openModal() {
         .add("show");
 
 }
-
 
 function closeModal() {
 
@@ -1063,89 +1014,104 @@ function closeModal() {
 
 }
 
-
 document
     .getElementById("gmscForm")
-    .addEventListener("submit", async function(event) {
+    .addEventListener(
+        "submit",
+        async function(event) {
 
-        event.preventDefault();
+            event.preventDefault();
 
-        const formData = new FormData(this);
+            const formData =
+                new FormData(this);
 
-        const data =
-            Object.fromEntries(formData.entries());
-
-        try {
-
-            const response =
-                await fetch("/api/register", {
-
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:
-                        JSON.stringify(data)
-
-                });
-
-            const result =
-                await response.json();
-
-            if (!response.ok) {
-
-                alert(
-                    result.error ||
-                    "Registration failed."
+            const data =
+                Object.fromEntries(
+                    formData.entries()
                 );
 
-                return;
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/register",
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+                            body:
+                                JSON.stringify(data)
+                        }
+                    );
+
+                const result =
+                    await response.json();
+
+                if (!response.ok) {
+
+                    alert(
+                        result.error ||
+                        "Registration failed."
+                    );
+
+                    return;
+                }
+
+                document
+                    .getElementById(
+                        "registrationFormArea"
+                    )
+                    .style.display = "none";
+
+                document
+                    .getElementById("success")
+                    .style.display = "block";
+
+                document
+                    .getElementById(
+                        "registrationCode"
+                    )
+                    .textContent =
+                    result.code;
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to connect to the GMSC server."
+                );
 
             }
 
-            document
-                .getElementById("registrationFormArea")
-                .style.display = "none";
-
-            document
-                .getElementById("success")
-                .style.display = "block";
-
-            document
-                .getElementById("registrationCode")
-                .textContent =
-                result.code;
-
-        } catch (error) {
-
-            console.error(error);
-
-            alert(
-                "Unable to connect to the GMSC server."
-            );
-
         }
-
-    });
+    );
 
 
 let testStarted = false;
 let testSubmitted = false;
 let currentRegistrationCode = "";
+let submissionInProgress = false;
 
 
 async function beginTest() {
 
     const codeInput =
-        document
-            .getElementById("testRegistrationCode");
+        document.getElementById(
+            "testRegistrationCode"
+        );
 
     const message =
-        document
-            .getElementById("testLoginMessage");
+        document.getElementById(
+            "testLoginMessage"
+        );
+
+    const startButton =
+        document.getElementById(
+            "startTestButton"
+        );
 
     const code =
         codeInput.value.trim();
@@ -1158,65 +1124,150 @@ async function beginTest() {
             "Please enter your registration code.";
 
         return;
-
     }
 
-    /*
-      The server verification endpoint will be
-      added next. Until then this function will
-      not start the real test.
-    */
+    startButton.disabled = true;
 
-    message.textContent =
-        "Test verification system is being connected to the server.";
+    startButton.textContent =
+        "VERIFYING...";
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/test/verify",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            registration_code:
+                                code
+                        })
+                }
+            );
+
+        const result =
+            await response.json();
+
+        if (!response.ok) {
+
+            message.textContent =
+                result.error ||
+                "Invalid registration code.";
+
+            startButton.disabled = false;
+
+            startButton.textContent =
+                "VERIFY CODE & START TEST →";
+
+            return;
+        }
+
+        currentRegistrationCode =
+            code;
+
+        testStarted = true;
+        testSubmitted = false;
+
+        document
+            .getElementById(
+                "testLoginArea"
+            )
+            .style.display = "none";
+
+        document
+            .getElementById(
+                "testArea"
+            )
+            .style.display = "block";
+
+        document
+            .getElementById(
+                "testArea"
+            )
+            .scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+
+    } catch (error) {
+
+        console.error(
+            "Test verification error:",
+            error
+        );
+
+        message.textContent =
+            "Unable to connect to the test server.";
+
+        startButton.disabled = false;
+
+        startButton.textContent =
+            "VERIFY CODE & START TEST →";
+    }
 
 }
 
 
 async function submitTest(reason) {
 
-    if (!testStarted || testSubmitted) {
+    if (
+        !testStarted ||
+        testSubmitted ||
+        submissionInProgress
+    ) {
         return;
     }
 
+    submissionInProgress = true;
     testSubmitted = true;
 
     const form =
-        document.getElementById("testForm");
+        document.getElementById(
+            "testForm"
+        );
 
     const answers =
         Object.fromEntries(
             new FormData(form).entries()
         );
 
+    const payload = {
+        registration_code:
+            currentRegistrationCode,
+
+        answers:
+            answers,
+
+        reason:
+            reason
+    };
+
     try {
 
         const response =
-            await fetch("/api/test/submit", {
+            await fetch(
+                "/api/test/submit",
+                {
+                    method: "POST",
 
-                method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                headers: {
-                    "Content-Type":
-                        "application/json"
-                },
+                    body:
+                        JSON.stringify(payload),
 
-                body: JSON.stringify({
-
-                    registration_code:
-                        currentRegistrationCode,
-
-                    answers:
-                        answers,
-
-                    reason:
-                        reason
-
-                }),
-
-                keepalive: true
-
-            });
+                    keepalive: true
+                }
+            );
 
         const result =
             await response.json();
@@ -1229,25 +1280,38 @@ async function submitTest(reason) {
             );
 
             testSubmitted = false;
+            submissionInProgress = false;
+
+            alert(
+                result.error ||
+                "Test submission failed."
+            );
 
             return;
-
         }
 
         document
-            .getElementById("testForm")
+            .getElementById(
+                "testForm"
+            )
             .style.display = "none";
 
         document
-            .querySelector(".test-warning")
+            .getElementById(
+                "testWarning"
+            )
             .style.display = "none";
 
         document
-            .getElementById("testSuccess")
+            .getElementById(
+                "testSuccess"
+            )
             .style.display = "block";
 
         document
-            .getElementById("submittedCode")
+            .getElementById(
+                "submittedCode"
+            )
             .textContent =
             currentRegistrationCode;
 
@@ -1258,6 +1322,12 @@ async function submitTest(reason) {
             error
         );
 
+        testSubmitted = false;
+        submissionInProgress = false;
+
+        alert(
+            "Unable to submit the test. Please try again."
+        );
     }
 
 }
@@ -1270,6 +1340,13 @@ document
         async function(event) {
 
             event.preventDefault();
+
+            if (!this.checkValidity()) {
+
+                this.reportValidity();
+
+                return;
+            }
 
             await submitTest(
                 "Student manually submitted the test."
