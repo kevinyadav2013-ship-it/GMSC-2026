@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GMSC 2026 | Global Maths & Science Competition</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f7fc;
+    color: #15213b;
+}
+
+header {
+    background: #07152f;
+    color: white;
+    padding: 18px 6%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: #38c7ff;
+}
+
+.menu {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+nav {
+    display: none;
+    position: absolute;
+    right: 6%;
+    top: 70px;
+    background: #0c2147;
+    border-radius: 12px;
+    padding: 10px;
+    width: 220px;
+}
+
+nav.open {
+    display: block;
+}
+
+nav a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    padding: 13px;
+}
+
+nav a:hover {
+    background: #173866;
+    border-radius: 8px;
+}
+
+.hero {
+    background: linear-gradient(135deg, #07152f, #1454a5);
+    color: white;
+    padding: 90px 7%;
+}
+
+.hero-content {
+    max-width: 800px;
+}
+
+.badge {
+    display: inline-block;
+    background: #0edb8a;
+    color: #063020;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 75px;
+    margin: 20px 0 10px;
+}
+
+h1 span {
+    color: #38c7ff;
+}
+
+.hero p {
+    font-size: 19px;
+    line-height: 1.6;
+}
+
+.btn {
+    padding: 15px 22px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.primary {
+    background: #ffc857;
+    color: #17233b;
+}
+
+.secondary {
+    background: transparent;
+    color: white;
+    border: 1px solid white;
+    margin-left: 10px;
+}
+
+section {
+    padding: 65px 7%;
+}
+
+.title {
+    text-align: center;
+    font-size: 34px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #64738b;
+    line-height: 1.6;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: white;
+    padding: 28px;
+    border-radius: 17px;
+    box-shadow: 0 8px 25px #10284d15;
+}
+
+.icon {
+    font-size: 35px;
+}
+
+.schedule {
+    background: #edf4ff;
+}
+
+.dates {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 18px;
+}
+
+.date {
+    background: white;
+    padding: 22px;
+    border-left: 5px solid #1769e0;
+    border-radius: 12px;
+}
+
+.date strong {
+    display: block;
+    font-size: 20px;
+    margin-top: 8px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: #000b;
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.form-box {
+    background: white;
+    width: min(550px, 100%);
+    max-height: 90vh;
+    overflow: auto;
+    border-radius: 18px;
+    padding: 28px;
+}
+
+.form-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.close {
+    border: none;
+    background: #eee;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 6px;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccd5e5;
+    border-radius: 8px;
+}
+
+.submit {
+    width: 100%;
+    margin-top: 20px;
+    background: #1769e0;
+    color: white;
+}
+
+.success {
+    display: none;
+    text-align: center;
+}
+
+.code {
+    background: #edf5ff;
+    color: #1769e0;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 25px;
+    font-weight: bold;
+    margin: 15px 0;
+}
+
+footer {
+    background: #07152f;
+    color: #b8c5da;
+    text-align: center;
+    padding: 35px;
+}
+
+.footer-title {
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+@media(max-width:600px) {
+    h1 {
+        font-size: 50px;
+    }
+
+    .secondary {
+        margin: 10px 0 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+GMSC <span>GLOBAL MATHS & SCIENCE COMPETITION</span>
+</div>
+
+<button class="menu" onclick="toggleMenu()">☰</button>
+
+<nav id="menu">
+<a href="#maths">🧮 Maths</a>
+<a href="#science">🔬 Science</a>
+<a href="#rounds">🏆 Rounds & Awards</a>
+<a href="#results">🏆 Results</a>
+<a href="#papers">📄 Question Papers</a>
+</nav>
+
+</header>
+
+<section class="hero">
+
+<div class="hero-content">
+
+<span class="badge">
+● REGISTRATIONS OPEN
+</span>
+
+<h1>
+GMSC <span>2026</span>
+</h1>
+
+<p>
+Global Maths & Science Competition for students of Classes 7–12.
+</p>
+
+<p>
+<strong>Registration Opens:</strong> 30 June 2026<br>
+<strong>Registration Deadline:</strong> 31 October 2026<br>
+<strong>Exam Date:</strong> 21 November 2026
+</p>
+
+<button class="btn primary" onclick="openModal()">
+REGISTER FOR GMSC →
+</button>
+
+</div>
+
+</section>
+
+<section id="maths">
+
+<h2 class="title">
+GMSC Competitions
+</h2>
+
+<p class="subtitle">
+Olympiad-style problem solving for students of Classes 7–12.
+</p>
+
+<div class="cards">
+
+<div class="card">
+<div class="icon">🧮</div>
+<h3>Mathematics</h3>
+<p>5 challenging problems.</p>
+</div>
+
+<div class="card" id="science">
+<div class="icon">🔬</div>
+<h3>Science</h3>
+<p>Scientific thinking and problem solving.</p>
+</div>
+
+<div class="card">
+<div class="icon">🎓</div>
+<h3>Eligibility</h3>
+<p>Students from Classes 7 to 12.</p>
+</div>
+
+</div>
+
+</section>
+
+<section class="schedule">
+
+<h2 class="title">
+GMSC 2026 Schedule
+</h2>
+
+<div class="dates">
+
+<div class="date">
+Registration Opens
+<strong>30 June 2026</strong>
+</div>
+
+<div class="date">
+Registration Deadline
+<strong>31 October 2026</strong>
+</div>
+
+<div class="date">
+Exam
+<strong>21 November 2026</strong>
+</div>
+
+<div class="date">
+Results
+<strong>15 January 2027</strong>
+</div>
+
+</div>
+
+</section>
+
+<section id="rounds">
+
+<h2 class="title">
+🏆 Two-Round System & Awards
+</h2>
+
+<p class="subtitle">
+GMSC has two rounds.
+</p>
+
+<div class="cards">
+
+<div class="card">
+<div class="icon">1️⃣</div>
+<h3>Round 1</h3>
+<p>
+Students must score <strong>full marks</strong> in Round 1 to qualify for Round 2.
+</p>
+</div>
+
+<div class="card">
+<div class="icon">2️⃣</div>
+<h3>Round 2</h3>
+<p>
+Only students who score full marks in Round 1 qualify for Round 2.
+</p>
+</div>
+
+<div class="card">
+<div class="icon">💵</div>
+<h3>$1,000 Award</h3>
+<p>
+Students who score full marks in both Round 1 and Round 2 qualify for the $1,000 award, subject to official verification and award rules.
+</p>
+</div>
+
+</div>
+
+</section>
+
+<section id="papers">
+
+<h2 class="title">
+📄 Question Papers
+</h2>
+
+<p class="subtitle">
+🔒 Question papers will become available on 21 November 2026.
+</p>
+
+</section>
+
+<section id="results">
+
+<h2 class="title">
+🏆 Results
+</h2>
+
+<p class="subtitle">
+GMSC 2026 results will be published on 15 January 2027.
+</p>
+
+</section>
+
+<footer>
+
+<div class="footer-title">
+GMSC — Global Maths & Science Competition
+</div>
+
+<p>
+Think Globally. Solve Brilliantly.
+</p>
+
+</footer>
+
+<div class="modal" id="modal">
+
+<div class="form-box">
+
+<div id="registrationFormArea">
+
+<div class="form-header">
+
+<h2>
+Register for GMSC 2026
+</h2>
+
+<button class="close" onclick="closeModal()">
+×
+</button>
+
+</div>
+
+<form id="gmscForm">
+
+<label>
+Student Name
+</label>
+
+<input
+name="student_name"
+required
+>
+
+<label>
+Email Address
+</label>
+
+<input
+name="email"
+type="email"
+required
+>
+
+<label>
+Mobile Number
+</label>
+
+<input
+name="mobile"
+type="tel"
+required
+>
+
+<label>
+Class
+</label>
+
+<select name="class" required>
+
+<option value="">
+Select Class
+</option>
+
+<option>7</option>
+<option>8</option>
+<option>9</option>
+<option>10</option>
+<option>11</option>
+<option>12</option>
+
+</select>
+
+<label>
+Father's Name
+</label>
+
+<input
+name="father_name"
+required
+>
+
+<button
+class="btn submit"
+type="submit"
+>
+SUBMIT REGISTRATION
+</button>
+
+</form>
+
+</div>
+
+<div class="success" id="success">
+
+<h2>
+✅ Registration Successful
+</h2>
+
+<p>
+Your GMSC Registration Code:
+</p>
+
+<div class="code" id="registrationCode">
+</div>
+
+<p>
+Please save this code.
+</p>
+
+<button
+class="btn submit"
+onclick="closeModal()"
+>
+DONE
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function toggleMenu() {
+
+document
+.getElementById("menu")
+.classList
+.toggle("open");
+
+}
+
+function openModal() {
+
+document
+.getElementById("modal")
+.classList
+.add("show");
+
+}
+
+function closeModal() {
+
+document
+.getElementById("modal")
+.classList
+.remove("show");
+
+}
+
+document
+.getElementById("gmscForm")
+.addEventListener("submit", async function(event) {
+
+event.preventDefault();
+
+const formData =
+new FormData(this);
+
+const data =
+Object.fromEntries(formData.entries());
+
+try {
+
+const response =
+await fetch("/api/register", {
+
+method: "POST",
+
+headers: {
+"Content-Type":
+"application/json"
+},
+
+body:
+JSON.stringify(data)
+
+});
+
+const result =
+await response.json();
+
+if (!response.ok) {
+
+alert(
+result.error ||
+"Registration failed."
+);
+
+return;
+
+}
+
+document
+.getElementById("registrationFormArea")
+.style.display = "none";
+
+document
+.getElementById("success")
+.style.display = "block";
+
+document
+.getElementById("registrationCode")
+.textContent =
+result.code;
+
+} catch(error) {
+
+alert(
+"Unable to connect to the GMSC server."
+);
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
