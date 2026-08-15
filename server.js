@@ -1,11 +1,12 @@
-import "dotenv/config"; 
+import "dotenv/config";
 import nodemailer from "nodemailer";
 import express from "express";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import Database from "better-sqlite3";
 
-const app = express(); 
+const app = express();
+
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -13,14 +14,15 @@ const transporter = nodemailer.createTransport({
     pass: process.env.GMSC_EMAIL_PASSWORD
   }
 });
+
 app.set("trust proxy", 1);
+
 const db = new Database("gmsc.sqlite");
 
 app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json());
 app.use(express.static("public"));
 
-db.exec(`
 db.exec(`
 CREATE TABLE IF NOT EXISTS registrations (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -41,27 +43,6 @@ CREATE TABLE IF NOT EXISTS test_submissions (
   submitted_at TEXT NOT NULL
 );
 `);
-);
-`);
-);
-db.exec(`
-CREATE TABLE IF NOT EXISTS test_submissions (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  registration_code TEXT NOT NULL,
-  answers TEXT NOT NULL,
-  reason TEXT NOT NULL,
-  submitted_at TEXT NOT NULL
-);
-db.exec(`
-CREATE TABLE IF NOT EXISTS test_submissions (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  registration_code TEXT NOT NULL,
-  answers TEXT NOT NULL,
-  reason TEXT NOT NULL,
-  submitted_at TEXT NOT NULL
-);
-`);
-`);
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -74,7 +55,7 @@ function clean(value) {
 
 function makeCode() {
   return "GMSC-2026-" + Math.floor(10000 + Math.random() * 90000);
-}
+});
 
 app.post("/api/register", limiter, async (req, res) => {
   const student_name = clean(req.body.student_name);
@@ -132,11 +113,13 @@ app.post("/api/register", limiter, async (req, res) => {
       }
     }
   }
-await transporter.sendMail({
-  from: process.env.GMSC_EMAIL,
-  to: process.env.GMSC_EMAIL,
-  subject: `New GMSC Registration - ${code}`,
-  text: `
+
+  try {
+    await transporter.sendMail({
+      from: process.env.GMSC_EMAIL,
+      to: process.env.GMSC_EMAIL,
+      subject: `New GMSC Registration - ${code}`,
+      text: `
 New GMSC registration received.
 
 Registration Code: ${code}
@@ -146,14 +129,22 @@ Mobile: ${mobile}
 Class: ${className}
 Father's Name: ${father_name}
 `
-});
+    });
+  } catch (error) {
+    console.error("Registration email failed:", error);
+  }
+
   res.status(201).json({
     code: code
   });
-  app.post("/api/test/submit", async (req, res) => {
-  const registration_code = String(req.body.registration_code || "").trim();
+});
+
+app.post("/api/test/submit", limiter, async (req, res) => {
+  const registration_code = clean(req.body.registration_code);
   const answers = req.body.answers || {};
-  const reason = String(req.body.reason || "Student submitted test");
+  const reason = clean(
+    req.body.reason || "Student submitted test"
+  );
 
   if (!registration_code) {
     return res.status(400).json({
@@ -162,7 +153,7 @@ Father's Name: ${father_name}
   }
 
   const registration = db.prepare(`
-    SELECT code
+    SELECT code, student_name, email, class
     FROM registrations
     WHERE code = ?
   `).get(registration_code);
@@ -173,22 +164,47 @@ Father's Name: ${father_name}
     });
   }
 
-  db.prepare(`
-    INSERT INTO test_submissions
-    (registration_code, answers, reason, submitted_at)
-    VALUES (?, ?, ?, ?)
-  `).run(
-    registration_code,
-    JSON.stringify(answers),
-    reason,
-    new Date().toISOString()
-  );
+  try {
+    db.prepare(`
+      INSERT INTO test_submissions
+      (registration_code, answers, reason, submitted_at)
+      VALUES (?, ?, ?, ?)
+    `).run(
+      registration_code,
+      JSON.stringify(answers),
+      reason,
+      new Date().toISOString()
+    );
 
-  res.status(201).json({
-    success: true,
-    message: "Test submitted successfully."
-  });
-});
+    await transporter.sendMail({
+      from: process.env.GMSC_EMAIL,
+      to: process.env.GMSC_EMAIL,
+      subject: `GMSC Test Submission - ${registration_code}`,
+      text: `
+New GMSC test submission received.
+
+Registration Code: ${registration_code}
+Student Name: ${registration.student_name}
+Student Email: ${registration.email}
+Class: ${registration.class}
+Submission Reason: ${reason}
+
+Answers:
+${JSON.stringify(answers, null, 2)}
+`
+    });
+
+    res.status(201).json({
+      success: true,
+      message: "Test submitted successfully."
+    });
+  } catch (error) {
+    console.error("Test submission error:", error);
+
+    res.status(500).json({
+      error: "Test submission could not be completed."
+    });
+  }
 });
 
 app.get("/api/status", (req, res) => {
@@ -207,9 +223,11 @@ app.get("/api/status", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
+
 app.get("/", (req, res) => {
   res.sendFile("index.html", { root: "public" });
 });
+
 app.listen(PORT, () => {
   console.log(`GMSC server running on port ${PORT}`);
 });
