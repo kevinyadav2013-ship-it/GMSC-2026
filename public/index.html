@@ -686,7 +686,48 @@ alert(
 }
 
 });
+let testStarted = false;
+let testSubmitted = false;
 
+function startTest() {
+    testStarted = true;
+}
+
+async function autoSubmitTest(reason) {
+    if (!testStarted || testSubmitted) return;
+
+    testSubmitted = true;
+
+    const form = document.getElementById("testForm");
+
+    if (!form) return;
+
+    const answers = Object.fromEntries(new FormData(form).entries());
+
+    try {
+        await fetch("/api/test/submit", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                reason: reason,
+                answers: answers
+            }),
+            keepalive: true
+        });
+    } catch (error) {
+        console.error("Automatic test submission failed.");
+    }
+
+    alert("You left the test page. Your test has been submitted.");
+}
+
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+        autoSubmitTest("Student left or switched the test page.");
+    }
+});
 </script>
 
 </body>
