@@ -115,7 +115,9 @@ app.get("/api/status", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-
+app.get("/", (req, res) => {
+  res.sendFile("index.html", { root: "public" });
+});
 app.listen(PORT, () => {
   console.log(`GMSC server running on port ${PORT}`);
 });
