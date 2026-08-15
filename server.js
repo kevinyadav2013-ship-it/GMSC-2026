@@ -7,7 +7,7 @@ import Database from "better-sqlite3";
 const app = express();
 const db = new Database("gmsc.sqlite");
 
-app.use(helmet());
+app.use(helmet({ contentSecurityPolicy: false }));
 app.use(express.json());
 app.use(express.static("public"));
 
