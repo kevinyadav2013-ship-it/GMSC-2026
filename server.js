@@ -21,6 +21,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 db.exec(`
+db.exec(`
 CREATE TABLE IF NOT EXISTS registrations (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   code TEXT UNIQUE NOT NULL,
@@ -30,12 +31,16 @@ CREATE TABLE IF NOT EXISTS registrations (
   class TEXT NOT NULL,
   father_name TEXT NOT NULL,
   created_at TEXT NOT NULL
-  CREATE TABLE IF NOT EXISTS test_submissions (
+);
+
+CREATE TABLE IF NOT EXISTS test_submissions (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   registration_code TEXT NOT NULL,
   answers TEXT NOT NULL,
   reason TEXT NOT NULL,
   submitted_at TEXT NOT NULL
+);
+`);
 );
 `);
 );
