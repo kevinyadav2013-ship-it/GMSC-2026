@@ -7,26 +7,30 @@ import Database from "better-sqlite3";
 
 const app = express();
 
-/* =========================
-   EMAIL
-========================= */
+/* =========================================================
+   EMAIL CONFIGURATION
+========================================================= */
+
+const EMAIL_TO = "kevinyadav2013@gmail.com";
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
 
   auth: {
     user: process.env.GMSC_EMAIL,
     pass: process.env.GMSC_EMAIL_PASSWORD
   },
 
-  connectionTimeout: 10000,
-  greetingTimeout: 10000,
-  socketTimeout: 10000
+  connectionTimeout: 30000,
+  greetingTimeout: 30000,
+  socketTimeout: 30000
 });
 
-/* =========================
+/* =========================================================
    SERVER
-========================= */
+========================================================= */
 
 app.set("trust proxy", 1);
 
@@ -38,13 +42,13 @@ app.use(
   })
 );
 
-app.use(express.json());
+app.use(express.json({ limit: "100kb" }));
 
 app.use(express.static("public"));
 
-/* =========================
+/* =========================================================
    DATABASE
-========================= */
+========================================================= */
 
 db.exec(`
 CREATE TABLE IF NOT EXISTS registrations (
@@ -67,9 +71,9 @@ CREATE TABLE IF NOT EXISTS test_submissions (
 );
 `);
 
-/* =========================
+/* =========================================================
    RATE LIMIT
-========================= */
+========================================================= */
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -78,9 +82,9 @@ const limiter = rateLimit({
   legacyHeaders: false
 });
 
-/* =========================
+/* =========================================================
    HELPERS
-========================= */
+========================================================= */
 
 function clean(value) {
   return String(value || "")
@@ -95,11 +99,25 @@ function makeCode() {
   );
 }
 
-/*
-  TEST IS OPEN ONLY ON
-  21 NOVEMBER 2026
-  INDIA TIME.
-*/
+/* =========================================================
+   REGISTRATION OPEN CHECK
+========================================================= */
+
+function isRegistrationOpen() {
+  const now = new Date();
+
+  const deadline = new Date(
+    "2026-10-31T23:59:59+05:30"
+  );
+
+  return now <= deadline;
+}
+
+/* =========================================================
+   TEST OPEN CHECK
+   ONLY 21 NOVEMBER 2026
+   INDIA TIME
+========================================================= */
 
 function isTestOpen() {
   const now = new Date();
@@ -115,14 +133,112 @@ function isTestOpen() {
   return now >= testStart && now < testEnd;
 }
 
-/* =========================
+/* =========================================================
+   SEND REGISTRATION EMAIL
+========================================================= */
+
+async function sendRegistrationEmail(data) {
+  const {
+    code,
+    student_name,
+    email,
+    mobile,
+    className,
+    father_name
+  } = data;
+
+  await transporter.sendMail({
+    from: process.env.GMSC_EMAIL,
+    to: EMAIL_TO,
+
+    subject:
+      `New GMSC Registration - ${code}`,
+
+    text: `
+NEW GMSC REGISTRATION
+
+Registration Code:
+${code}
+
+Student Name:
+${student_name}
+
+Student Email:
+${email}
+
+Mobile:
+${mobile}
+
+Class:
+${className}
+
+Father's Name:
+${father_name}
+
+Registration Time:
+${new Date().toISOString()}
+`
+  });
+}
+
+/* =========================================================
+   SEND TEST SUBMISSION EMAIL
+========================================================= */
+
+async function sendTestSubmissionEmail(data) {
+  const {
+    registration_code,
+    student_name,
+    email,
+    className,
+    reason,
+    answers
+  } = data;
+
+  await transporter.sendMail({
+    from: process.env.GMSC_EMAIL,
+    to: EMAIL_TO,
+
+    subject:
+      `GMSC Test Submission - ${registration_code}`,
+
+    text: `
+NEW GMSC TEST SUBMISSION
+
+Registration Code:
+${registration_code}
+
+Student Name:
+${student_name}
+
+Student Email:
+${email}
+
+Class:
+${className}
+
+Submission Reason:
+${reason}
+
+ANSWERS
+=======
+
+${JSON.stringify(answers, null, 2)}
+
+Submitted:
+${new Date().toISOString()}
+`
+  });
+}
+
+/* =========================================================
    REGISTRATION
-========================= */
+========================================================= */
 
 app.post(
   "/api/register",
   limiter,
-  (req, res) => {
+  async (req, res) => {
 
     const student_name =
       clean(req.body.student_name);
@@ -139,6 +255,10 @@ app.post(
     const father_name =
       clean(req.body.father_name);
 
+    /* -------------------------
+       VALIDATION
+    ------------------------- */
+
     if (
       !student_name ||
       !email ||
@@ -153,12 +273,11 @@ app.post(
       });
     }
 
-    const deadline =
-      new Date(
-        "2026-10-31T23:59:59+05:30"
-      );
+    /* -------------------------
+       REGISTRATION DEADLINE
+    ------------------------- */
 
-    if (new Date() > deadline) {
+    if (!isRegistrationOpen()) {
 
       return res.status(403).json({
         error:
@@ -166,6 +285,10 @@ app.post(
       });
 
     }
+
+    /* -------------------------
+       CREATE UNIQUE CODE
+    ------------------------- */
 
     let code;
 
@@ -207,7 +330,7 @@ app.post(
         ) {
 
           console.error(
-            "Registration database error:",
+            "REGISTRATION DATABASE ERROR:",
             error
           );
 
@@ -217,85 +340,74 @@ app.post(
           });
 
         }
+
       }
     }
 
-    /*
-      Return the registration code immediately.
-      Email does not delay registration.
-    */
+    /* -------------------------
+       SEND EMAIL
+    ------------------------- */
 
-    res.status(201).json({
-      success: true,
-      code: code
-    });
+    let emailSent = false;
 
-    /*
-      Send email in background.
-    */
+    try {
 
-    transporter
-      .sendMail({
-        from: process.env.GMSC_EMAIL,
-
-        to: "kevinyadav2013@gmail.com",
-
-        subject:
-          `New GMSC Registration - ${code}`,
-
-        text: `
-New GMSC registration received.
-
-Registration Code:
-${code}
-
-Student Name:
-${student_name}
-
-Student Email:
-${email}
-
-Mobile:
-${mobile}
-
-Class:
-${className}
-
-Father's Name:
-${father_name}
-`
-      })
-      .then(() => {
-
-        console.log(
-          "Registration email sent successfully."
-        );
-
-      })
-      .catch((error) => {
-
-        console.error(
-          "Registration email failed:",
-          error
-        );
-
+      await sendRegistrationEmail({
+        code,
+        student_name,
+        email,
+        mobile,
+        className,
+        father_name
       });
+
+      emailSent = true;
+
+      console.log(
+        `REGISTRATION EMAIL SENT: ${code}`
+      );
+
+    } catch (error) {
+
+      console.error(
+        `REGISTRATION EMAIL FAILED: ${code}`
+      );
+
+      console.error(error);
+
+    }
+
+    /* -------------------------
+       RETURN RESULT
+    ------------------------- */
+
+    return res.status(201).json({
+
+      success: true,
+
+      code,
+
+      emailSent,
+
+      message: emailSent
+        ? "Registration completed successfully."
+        : "Registration completed, but the notification email could not be sent."
+    });
   }
 );
 
-/* =========================
+/* =========================================================
    TEST VERIFICATION
-========================= */
+========================================================= */
 
 app.post(
   "/api/test/verify",
   limiter,
   (req, res) => {
 
-    /*
-      Test is ONLY available
-      on 21 November 2026.
-    */
+    /* -------------------------
+       DATE CHECK
+    ------------------------- */
 
     if (!isTestOpen()) {
 
@@ -305,6 +417,10 @@ app.post(
       });
 
     }
+
+    /* -------------------------
+       CODE
+    ------------------------- */
 
     const registration_code =
       clean(
@@ -319,6 +435,10 @@ app.post(
       });
 
     }
+
+    /* -------------------------
+       FIND REGISTRATION
+    ------------------------- */
 
     const registration =
       db.prepare(`
@@ -342,6 +462,10 @@ app.post(
 
     }
 
+    /* -------------------------
+       VERIFIED
+    ------------------------- */
+
     return res.json({
 
       verified: true,
@@ -359,19 +483,18 @@ app.post(
   }
 );
 
-/* =========================
+/* =========================================================
    TEST SUBMISSION
-========================= */
+========================================================= */
 
 app.post(
   "/api/test/submit",
   limiter,
-  (req, res) => {
+  async (req, res) => {
 
-    /*
-      Test is ONLY available
-      on 21 November 2026.
-    */
+    /* -------------------------
+       DATE CHECK
+    ------------------------- */
 
     if (!isTestOpen()) {
 
@@ -381,6 +504,10 @@ app.post(
       });
 
     }
+
+    /* -------------------------
+       DATA
+    ------------------------- */
 
     const registration_code =
       clean(
@@ -405,6 +532,10 @@ app.post(
 
     }
 
+    /* -------------------------
+       FIND STUDENT
+    ------------------------- */
+
     const registration =
       db.prepare(`
         SELECT
@@ -427,6 +558,10 @@ app.post(
 
     }
 
+    /* -------------------------
+       SAVE TEST
+    ------------------------- */
+
     try {
 
       db.prepare(`
@@ -445,93 +580,82 @@ app.post(
         new Date().toISOString()
       );
 
-      /*
-        Respond immediately.
-      */
-
-      res.status(201).json({
-        success: true,
-        message:
-          "Test submitted successfully."
-      });
-
-      /*
-        Send submission email
-        in the background.
-      */
-
-      transporter
-        .sendMail({
-
-          from:
-            process.env.GMSC_EMAIL,
-
-          to:
-            "kevinyadav2013@gmail.com",
-
-          subject:
-            `GMSC Test Submission - ${registration_code}`,
-
-          text: `
-New GMSC test submission received.
-
-Registration Code:
-${registration_code}
-
-Student Name:
-${registration.student_name}
-
-Student Email:
-${registration.email}
-
-Class:
-${registration.class}
-
-Submission Reason:
-${reason}
-
-Answers:
-${JSON.stringify(
-  answers,
-  null,
-  2
-)}
-`
-        })
-        .then(() => {
-
-          console.log(
-            "Test submission email sent successfully."
-          );
-
-        })
-        .catch((error) => {
-
-          console.error(
-            "Test submission email failed:",
-            error
-          );
-
-        });
-
     } catch (error) {
 
       console.error(
-        "Test database error:",
+        "TEST DATABASE ERROR:",
         error
       );
 
       return res.status(500).json({
         error:
-          "Test submission could not be completed."
+          "Test submission could not be saved."
       });
+
     }
+
+    /* -------------------------
+       SEND EMAIL
+    ------------------------- */
+
+    let emailSent = false;
+
+    try {
+
+      await sendTestSubmissionEmail({
+
+        registration_code,
+
+        student_name:
+          registration.student_name,
+
+        email:
+          registration.email,
+
+        className:
+          registration.class,
+
+        reason,
+
+        answers
+
+      });
+
+      emailSent = true;
+
+      console.log(
+        `TEST EMAIL SENT: ${registration_code}`
+      );
+
+    } catch (error) {
+
+      console.error(
+        `TEST EMAIL FAILED: ${registration_code}`
+      );
+
+      console.error(error);
+
+    }
+
+    /* -------------------------
+       RESULT
+    ------------------------- */
+
+    return res.status(201).json({
+
+      success: true,
+
+      emailSent,
+
+      message:
+        "Test submitted successfully."
+    });
   }
 );
 
-/* =========================
+/* =========================================================
    STATUS
-========================= */
+========================================================= */
 
 app.get(
   "/api/status",
@@ -541,14 +665,7 @@ app.get(
       new Date();
 
     const registrationOpen =
-      now <=
-      new Date(
-        "2026-10-31T23:59:59+05:30"
-      );
-
-    /*
-      TRUE ONLY ON 21 NOVEMBER.
-    */
+      isRegistrationOpen();
 
     const testOpen =
       isTestOpen();
@@ -559,7 +676,7 @@ app.get(
         "2027-01-15T00:00:00+05:30"
       );
 
-    res.json({
+    return res.json({
 
       registrationOpen,
 
@@ -574,9 +691,9 @@ app.get(
   }
 );
 
-/* =========================
+/* =========================================================
    HOME PAGE
-========================= */
+========================================================= */
 
 app.get(
   "/",
@@ -588,24 +705,62 @@ app.get(
         root: "public"
       }
     );
+
   }
 );
 
-/* =========================
+/* =========================================================
    START SERVER
-========================= */
+========================================================= */
 
 const PORT =
   process.env.PORT || 3000;
 
 app.listen(
   PORT,
-  () => {
+  async () => {
 
     console.log(
       `GMSC server running on port ${PORT}`
     );
 
+    /* -------------------------
+       CHECK EMAIL CONNECTION
+    ------------------------- */
+
+    if (
+      !process.env.GMSC_EMAIL ||
+      !process.env.GMSC_EMAIL_PASSWORD
+    ) {
+
+      console.error(
+        "EMAIL ERROR: GMSC_EMAIL or GMSC_EMAIL_PASSWORD is missing."
+      );
+
+      return;
+    }
+
+    try {
+
+      await transporter.verify();
+
+      console.log(
+        "EMAIL SMTP CONNECTION VERIFIED SUCCESSFULLY."
+      );
+
+      console.log(
+        `Registration emails will be sent to ${EMAIL_TO}`
+      );
+
+    } catch (error) {
+
+      console.error(
+        "EMAIL SMTP CONNECTION FAILED:"
+      );
+
+      console.error(error);
+
+    }
+
   }
 );
-
