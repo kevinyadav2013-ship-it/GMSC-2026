@@ -46,7 +46,9 @@ CREATE TABLE IF NOT EXISTS test_submissions (
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  limit: 10
+  limit: 10,
+  standardHeaders: "draft-7",
+  legacyHeaders: false
 });
 
 function clean(value) {
@@ -55,7 +57,7 @@ function clean(value) {
 
 function makeCode() {
   return "GMSC-2026-" + Math.floor(10000 + Math.random() * 90000);
-});
+}
 
 app.post("/api/register", limiter, async (req, res) => {
   const student_name = clean(req.body.student_name);
@@ -107,6 +109,8 @@ app.post("/api/register", limiter, async (req, res) => {
       break;
     } catch (error) {
       if (!String(error.message).includes("UNIQUE")) {
+        console.error("Registration database error:", error);
+
         return res.status(500).json({
           error: "Registration could not be completed."
         });
@@ -134,8 +138,8 @@ Father's Name: ${father_name}
     console.error("Registration email failed:", error);
   }
 
-  res.status(201).json({
-    code: code
+  return res.status(201).json({
+    code
   });
 });
 
@@ -194,14 +198,14 @@ ${JSON.stringify(answers, null, 2)}
 `
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: "Test submitted successfully."
     });
   } catch (error) {
     console.error("Test submission error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       error: "Test submission could not be completed."
     });
   }
@@ -231,3 +235,4 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`GMSC server running on port ${PORT}`);
 });
+ 
