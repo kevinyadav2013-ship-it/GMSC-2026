@@ -8,11 +8,16 @@ import Database from "better-sqlite3";
 const app = express();
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.GMSC_EMAIL,
     pass: process.env.GMSC_EMAIL_PASSWORD
-  }
+  },
+  connectionTimeout: 20000,
+  greetingTimeout: 20000,
+  socketTimeout: 20000
 });
 
 app.set("trust proxy", 1);
@@ -121,7 +126,7 @@ app.post("/api/register", limiter, async (req, res) => {
   try {
     await transporter.sendMail({
       from: process.env.GMSC_EMAIL,
-      to: process.env.GMSC_EMAIL,
+      to: "kevinyadav2013@gmail.com",
       subject: `New GMSC Registration - ${code}`,
       text: `
 New GMSC registration received.
@@ -134,8 +139,16 @@ Class: ${className}
 Father's Name: ${father_name}
 `
     });
+
+    console.log(
+      `Registration email sent successfully for ${code}`
+    );
+
   } catch (error) {
-    console.error("Registration email failed:", error);
+    console.error(
+      "Registration email failed:",
+      error
+    );
   }
 
   return res.status(201).json({
@@ -144,11 +157,17 @@ Father's Name: ${father_name}
 });
 
 app.post("/api/test/submit", limiter, async (req, res) => {
-  const registration_code = clean(req.body.registration_code);
-  const answers = req.body.answers || {};
-  const reason = clean(
-    req.body.reason || "Student submitted test"
-  );
+  const registration_code =
+    clean(req.body.registration_code);
+
+  const answers =
+    req.body.answers || {};
+
+  const reason =
+    clean(
+      req.body.reason ||
+      "Student submitted test"
+    );
 
   if (!registration_code) {
     return res.status(400).json({
@@ -180,11 +199,13 @@ app.post("/api/test/submit", limiter, async (req, res) => {
       new Date().toISOString()
     );
 
-    await transporter.sendMail({
-      from: process.env.GMSC_EMAIL,
-      to: process.env.GMSC_EMAIL,
-      subject: `GMSC Test Submission - ${registration_code}`,
-      text: `
+    try {
+      await transporter.sendMail({
+        from: process.env.GMSC_EMAIL,
+        to: "kevinyadav2013@gmail.com",
+        subject:
+          `GMSC Test Submission - ${registration_code}`,
+        text: `
 New GMSC test submission received.
 
 Registration Code: ${registration_code}
@@ -196,17 +217,33 @@ Submission Reason: ${reason}
 Answers:
 ${JSON.stringify(answers, null, 2)}
 `
-    });
+      });
+
+      console.log(
+        `Test submission email sent for ${registration_code}`
+      );
+
+    } catch (emailError) {
+      console.error(
+        "Test submission email failed:",
+        emailError
+      );
+    }
 
     return res.status(201).json({
       success: true,
       message: "Test submitted successfully."
     });
+
   } catch (error) {
-    console.error("Test submission error:", error);
+    console.error(
+      "Test submission error:",
+      error
+    );
 
     return res.status(500).json({
-      error: "Test submission could not be completed."
+      error:
+        "Test submission could not be completed."
     });
   }
 });
@@ -216,23 +253,40 @@ app.get("/api/status", (req, res) => {
 
   res.json({
     registrationOpen:
-      now <= new Date("2026-10-31T23:59:59+05:30"),
+      now <=
+      new Date(
+        "2026-10-31T23:59:59+05:30"
+      ),
 
     questionPapersAvailable:
-      now >= new Date("2026-11-21T00:00:00+05:30"),
+      now >=
+      new Date(
+        "2026-11-21T00:00:00+05:30"
+      ),
 
     resultsAvailable:
-      now >= new Date("2027-01-15T00:00:00+05:30")
+      now >=
+      new Date(
+        "2027-01-15T00:00:00+05:30"
+      )
   });
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT =
+  process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
-  res.sendFile("index.html", { root: "public" });
+  res.sendFile(
+    "index.html",
+    {
+      root: "public"
+    }
+  );
 });
 
 app.listen(PORT, () => {
-  console.log(`GMSC server running on port ${PORT}`);
+  console.log(
+    `GMSC server running on port ${PORT}`
+  );
 });
  
