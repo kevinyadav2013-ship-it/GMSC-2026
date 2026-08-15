@@ -12,10 +12,6 @@
     box-sizing: border-box;
 }
 
-html {
-    scroll-behavior: smooth;
-}
-
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -124,13 +120,6 @@ h1 span {
 .primary {
     background: #ffc857;
     color: #17233b;
-}
-
-.secondary {
-    background: transparent;
-    color: white;
-    border: 1px solid white;
-    margin-left: 10px;
 }
 
 section {
@@ -270,6 +259,22 @@ textarea {
     font-size: 25px;
     font-weight: bold;
     margin: 15px 0;
+}
+
+.notice {
+    max-width: 850px;
+    margin: 30px auto;
+    background: white;
+    border-left: 6px solid #1769e0;
+    padding: 28px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px #10284d15;
+}
+
+.notice-email {
+    color: #1769e0;
+    font-size: 20px;
+    font-weight: bold;
     word-break: break-word;
 }
 
@@ -314,14 +319,6 @@ textarea {
     margin: 20px 0;
 }
 
-.test-info {
-    background: #e8f2ff;
-    border-left: 5px solid #1769e0;
-    padding: 15px;
-    border-radius: 10px;
-    margin: 20px 0;
-}
-
 .test-success {
     display: none;
     background: #e7fff4;
@@ -336,17 +333,12 @@ textarea {
     margin-top: 15px;
 }
 
-.test-message {
-    margin-top: 15px;
-    font-weight: bold;
-}
-
-.status-closed {
-    color: #c62828;
-}
-
-.status-open {
-    color: #087443;
+.test-info {
+    background: #edf5ff;
+    border-left: 5px solid #1769e0;
+    padding: 15px;
+    border-radius: 10px;
+    margin-top: 20px;
 }
 
 footer {
@@ -363,21 +355,8 @@ footer {
 }
 
 @media(max-width:600px) {
-
     h1 {
         font-size: 50px;
-    }
-
-    .secondary {
-        margin: 10px 0 0;
-    }
-
-    .logo {
-        font-size: 16px;
-    }
-
-    section {
-        padding: 50px 5%;
     }
 }
 </style>
@@ -391,23 +370,15 @@ footer {
 GMSC <span>GLOBAL MATHS & SCIENCE COMPETITION</span>
 </div>
 
-<button
-    class="menu"
-    onclick="toggleMenu()"
-    type="button"
->
-☰
-</button>
+<button class="menu" onclick="toggleMenu()">☰</button>
 
 <nav id="menu">
-
 <a href="#maths">🧮 Maths</a>
 <a href="#science">🔬 Science</a>
 <a href="#rounds">🏆 Rounds & Awards</a>
 <a href="#results">🏆 Results</a>
 <a href="#test">📝 TEST</a>
 <a href="#papers">📄 Question Papers</a>
-
 </nav>
 
 </header>
@@ -435,11 +406,7 @@ Global Maths & Science Competition for students of Classes 7–12.
 <strong>Exam Date:</strong> 21 November 2026
 </p>
 
-<button
-    class="btn primary"
-    onclick="openModal()"
-    type="button"
->
+<button class="btn primary" onclick="openModal()">
 REGISTER FOR GMSC →
 </button>
 
@@ -461,50 +428,21 @@ Olympiad-style problem solving for students of Classes 7–12.
 <div class="cards">
 
 <div class="card">
-
 <div class="icon">🧮</div>
-
-<h3>
-Mathematics
-</h3>
-
-<p>
-5 challenging problems.
-</p>
-
+<h3>Mathematics</h3>
+<p>5 challenging problems.</p>
 </div>
 
-
-<div
-    class="card"
-    id="science"
->
-
+<div class="card" id="science">
 <div class="icon">🔬</div>
-
-<h3>
-Science
-</h3>
-
-<p>
-Scientific thinking and problem solving.
-</p>
-
+<h3>Science</h3>
+<p>Scientific thinking and problem solving.</p>
 </div>
-
 
 <div class="card">
-
 <div class="icon">🎓</div>
-
-<h3>
-Eligibility
-</h3>
-
-<p>
-Students from Classes 7 to 12.
-</p>
-
+<h3>Eligibility</h3>
+<p>Students from Classes 7 to 12.</p>
 </div>
 
 </div>
@@ -545,6 +483,61 @@ Results
 </section>
 
 
+<!-- IMPORTANT REGISTRATION NOTICE -->
+
+<section id="important">
+
+<h2 class="title">
+📢 Important Information for GMSC Participants
+</h2>
+
+<div class="notice">
+
+<h3>
+📝 GMSC Test — 21 November 2026
+</h3>
+
+<p>
+<strong>Important:</strong> The GMSC test will be available
+<strong>only on 21 November 2026</strong>.
+</p>
+
+<p>
+During the test, students must write/select their answers
+on the provided GMSC test page and submit their completed
+answers through the GMSC website.
+</p>
+
+<p>
+Successfully submitted test responses will be received by
+the GMSC administration at:
+</p>
+
+<p class="notice-email">
+kevinyadav2013@gmail.com
+</p>
+
+<div class="test-warning">
+
+<strong>⚠️ Please remember your GMSC Registration Code.</strong>
+
+<br><br>
+
+You will need your registration code to access the test
+on 21 November 2026.
+
+</div>
+
+<p>
+<strong>🔒 The test cannot be accessed before
+21 November 2026.</strong>
+</p>
+
+</div>
+
+</section>
+
+
 <section id="rounds">
 
 <h2 class="title">
@@ -558,57 +551,39 @@ GMSC has two rounds.
 <div class="cards">
 
 <div class="card">
-
 <div class="icon">1️⃣</div>
-
-<h3>
-Round 1
-</h3>
-
+<h3>Round 1</h3>
 <p>
-Students must score <strong>full marks</strong>
-in Round 1 to qualify for Round 2.
+Students must score <strong>full marks</strong> in Round 1
+to qualify for Round 2.
 </p>
-
 </div>
 
-
 <div class="card">
-
 <div class="icon">2️⃣</div>
-
-<h3>
-Round 2
-</h3>
-
+<h3>Round 2</h3>
 <p>
-Only students who score full marks in Round 1
-qualify for Round 2.
+Only students who score full marks in Round 1 qualify
+for Round 2.
 </p>
-
 </div>
 
-
 <div class="card">
-
 <div class="icon">💵</div>
-
-<h3>
-$1,000 Award
-</h3>
-
+<h3>$1,000 Award</h3>
 <p>
-Students who score full marks in both Round 1
-and Round 2 qualify for the $1,000 award,
-subject to official verification and award rules.
+Students who score full marks in both Round 1 and Round 2
+qualify for the $1,000 award, subject to official
+verification and award rules.
 </p>
-
 </div>
 
 </div>
 
 </section>
 
+
+<!-- TEST -->
 
 <section id="test">
 
@@ -617,80 +592,58 @@ subject to official verification and award rules.
 </h2>
 
 <p class="subtitle">
-The GMSC test is available <strong>ONLY on 21 November 2026</strong>.
+The test is available only on 21 November 2026.
 </p>
 
 
-<div
-    id="testLoginArea"
-    class="card test-box"
->
+<div id="testLoginArea" class="card test-box">
 
 <h3>
-Enter Registration Code
+🔐 Enter Registration Code
 </h3>
 
 <p>
-Use the registration code received after registering
-for GMSC.
+Use the GMSC registration code you received after registering.
 </p>
-
-<div class="test-info">
-
-<strong>Test date:</strong>
-21 November 2026
-
-<br><br>
-
-<strong>Availability:</strong>
-Only during 21 November 2026 (India time).
-
-</div>
 
 <label for="testRegistrationCode">
 Registration Code
 </label>
 
 <input
-    id="testRegistrationCode"
-    type="text"
-    placeholder="GMSC-2026-12345"
-    autocomplete="off"
+id="testRegistrationCode"
+type="text"
+placeholder="GMSC-2026-12345"
+autocomplete="off"
 >
 
 <div class="test-warning">
 
 <strong>Important:</strong>
 
-<br><br>
-
-Once the test begins, leaving or switching away
-from the test page may automatically submit your test.
+The GMSC test is available only on
+<strong>21 November 2026</strong>.
 
 </div>
 
 <button
-    class="btn submit"
-    type="button"
-    id="verifyTestButton"
-    onclick="beginTest()"
+class="btn submit"
+type="button"
+id="startTestButton"
+onclick="beginTest()"
 >
 VERIFY CODE & START TEST →
 </button>
 
 <div
-    id="testLoginMessage"
-    class="test-error"
->
-</div>
+id="testLoginMessage"
+class="test-error"
+></div>
 
 </div>
 
 
-<div
-    id="testArea"
-    class="test-area test-box"
->
+<div id="testArea" class="test-area test-box">
 
 <div class="test-warning">
 
@@ -699,7 +652,7 @@ VERIFY CODE & START TEST →
 <br><br>
 
 Do not switch tabs, minimize the browser,
-or leave this page.
+or leave the test page.
 
 Leaving the test page may automatically submit
 your test.
@@ -710,50 +663,36 @@ your test.
 <form id="testForm">
 
 
+<!-- TEMPORARY QUESTIONS
+     These can be replaced with your final
+     10 questions later.
+-->
+
 <div class="test-question">
 
-<h3>
-Question 1
-</h3>
+<h3>Question 1</h3>
 
 <p>
 Which number is a prime number?
 </p>
 
 <label class="test-option">
-<input
-    type="radio"
-    name="q1"
-    value="A"
-    required
->
+<input type="radio" name="q1" value="A" required>
 A) 21
 </label>
 
 <label class="test-option">
-<input
-    type="radio"
-    name="q1"
-    value="B"
->
+<input type="radio" name="q1" value="B">
 B) 29
 </label>
 
 <label class="test-option">
-<input
-    type="radio"
-    name="q1"
-    value="C"
->
+<input type="radio" name="q1" value="C">
 C) 35
 </label>
 
 <label class="test-option">
-<input
-    type="radio"
-    name="q1"
-    value="D"
->
+<input type="radio" name="q1" value="D">
 D) 39
 </label>
 
@@ -762,48 +701,29 @@ D) 39
 
 <div class="test-question">
 
-<h3>
-Question 2
-</h3>
+<h3>Question 2</h3>
 
 <p>
 What is 12 × 8?
 </p>
 
 <label class="test-option">
-<input
-    type="radio"
-    name="q2"
-    value="A"
-    required
->
+<input type="radio" name="q2" value="A" required>
 A) 86
 </label>
 
 <label class="test-option">
-<input
-    type="radio"
-    name="q2"
-    value="B"
->
+<input type="radio" name="q2" value="B">
 B) 96
 </label>
 
 <label class="test-option">
-<input
-    type="radio"
-    name="q2"
-    value="C"
->
+<input type="radio" name="q2" value="C">
 C) 108
 </label>
 
 <label class="test-option">
-<input
-    type="radio"
-    name="q2"
-    value="D"
->
+<input type="radio" name="q2" value="D">
 D) 112
 </label>
 
@@ -812,48 +732,29 @@ D) 112
 
 <div class="test-question">
 
-<h3>
-Question 3
-</h3>
+<h3>Question 3</h3>
 
 <p>
 Which gas is most abundant in Earth's atmosphere?
 </p>
 
 <label class="test-option">
-<input
-    type="radio"
-    name="q3"
-    value="A"
-    required
->
+<input type="radio" name="q3" value="A" required>
 A) Oxygen
 </label>
 
 <label class="test-option">
-<input
-    type="radio"
-    name="q3"
-    value="B"
->
+<input type="radio" name="q3" value="B">
 B) Carbon dioxide
 </label>
 
 <label class="test-option">
-<input
-    type="radio"
-    name="q3"
-    value="C"
->
+<input type="radio" name="q3" value="C">
 C) Nitrogen
 </label>
 
 <label class="test-option">
-<input
-    type="radio"
-    name="q3"
-    value="D"
->
+<input type="radio" name="q3" value="D">
 D) Hydrogen
 </label>
 
@@ -862,48 +763,29 @@ D) Hydrogen
 
 <div class="test-question">
 
-<h3>
-Question 4
-</h3>
+<h3>Question 4</h3>
 
 <p>
 What is the SI unit of force?
 </p>
 
 <label class="test-option">
-<input
-    type="radio"
-    name="q4"
-    value="A"
-    required
->
+<input type="radio" name="q4" value="A" required>
 A) Joule
 </label>
 
 <label class="test-option">
-<input
-    type="radio"
-    name="q4"
-    value="B"
->
+<input type="radio" name="q4" value="B">
 B) Watt
 </label>
 
 <label class="test-option">
-<input
-    type="radio"
-    name="q4"
-    value="C"
->
+<input type="radio" name="q4" value="C">
 C) Newton
 </label>
 
 <label class="test-option">
-<input
-    type="radio"
-    name="q4"
-    value="D"
->
+<input type="radio" name="q4" value="D">
 D) Pascal
 </label>
 
@@ -912,58 +794,49 @@ D) Pascal
 
 <div class="test-question">
 
-<h3>
-Question 5
-</h3>
+<h3>Question 5</h3>
 
 <p>
 What is the value of 2³?
 </p>
 
 <label class="test-option">
-<input
-    type="radio"
-    name="q5"
-    value="A"
-    required
->
+<input type="radio" name="q5" value="A" required>
 A) 6
 </label>
 
 <label class="test-option">
-<input
-    type="radio"
-    name="q5"
-    value="B"
->
+<input type="radio" name="q5" value="B">
 B) 8
 </label>
 
 <label class="test-option">
-<input
-    type="radio"
-    name="q5"
-    value="C"
->
+<input type="radio" name="q5" value="C">
 C) 9
 </label>
 
 <label class="test-option">
-<input
-    type="radio"
-    name="q5"
-    value="D"
->
+<input type="radio" name="q5" value="D">
 D) 12
 </label>
 
 </div>
 
 
+<div class="test-info">
+
+<strong>📌 Notice:</strong>
+
+Write/select your answers on this page and submit
+your completed test through the GMSC website.
+
+</div>
+
+
 <button
-    class="btn submit"
-    type="submit"
-    id="submitTestButton"
+class="btn submit"
+type="submit"
+id="submitTestButton"
 >
 SUBMIT TEST
 </button>
@@ -972,8 +845,8 @@ SUBMIT TEST
 
 
 <div
-    id="testSuccess"
-    class="test-success"
+id="testSuccess"
+class="test-success"
 >
 
 <h2>
@@ -1037,14 +910,9 @@ Think Globally. Solve Brilliantly.
 </footer>
 
 
-<!-- =========================
-     REGISTRATION MODAL
-========================= -->
+<!-- REGISTRATION MODAL -->
 
-<div
-    class="modal"
-    id="modal"
->
+<div class="modal" id="modal">
 
 <div class="form-box">
 
@@ -1057,9 +925,9 @@ Register for GMSC 2026
 </h2>
 
 <button
-    class="close"
-    onclick="closeModal()"
-    type="button"
+class="close"
+onclick="closeModal()"
+type="button"
 >
 ×
 </button>
@@ -1074,8 +942,8 @@ Student Name
 </label>
 
 <input
-    name="student_name"
-    required
+name="student_name"
+required
 >
 
 
@@ -1084,9 +952,9 @@ Email Address
 </label>
 
 <input
-    name="email"
-    type="email"
-    required
+name="email"
+type="email"
+required
 >
 
 
@@ -1095,9 +963,9 @@ Mobile Number
 </label>
 
 <input
-    name="mobile"
-    type="tel"
-    required
+name="mobile"
+type="tel"
+required
 >
 
 
@@ -1105,10 +973,7 @@ Mobile Number
 Class
 </label>
 
-<select
-    name="class"
-    required
->
+<select name="class" required>
 
 <option value="">
 Select Class
@@ -1129,34 +994,25 @@ Father's Name
 </label>
 
 <input
-    name="father_name"
-    required
+name="father_name"
+required
 >
 
 
 <button
-    class="btn submit"
-    type="submit"
-    id="registrationButton"
+class="btn submit"
+type="submit"
+id="registrationSubmitButton"
 >
 SUBMIT REGISTRATION
 </button>
-
-<div
-    id="registrationMessage"
-    class="test-message"
->
-</div>
 
 </form>
 
 </div>
 
 
-<div
-    class="success"
-    id="success"
->
+<div class="success" id="success">
 
 <h2>
 ✅ Registration Successful
@@ -1167,19 +1023,18 @@ Your GMSC Registration Code:
 </p>
 
 <div
-    class="code"
-    id="registrationCode"
->
-</div>
+class="code"
+id="registrationCode"
+></div>
 
 <p>
 Please save this code carefully.
 </p>
 
 <button
-    class="btn submit"
-    onclick="closeModal()"
-    type="button"
+class="btn submit"
+onclick="closeModal()"
+type="button"
 >
 DONE
 </button>
@@ -1193,9 +1048,9 @@ DONE
 
 <script>
 
-/* =========================
+/* =========================================================
    MENU
-========================= */
+========================================================= */
 
 function toggleMenu() {
 
@@ -1207,9 +1062,9 @@ function toggleMenu() {
 }
 
 
-/* =========================
+/* =========================================================
    REGISTRATION MODAL
-========================= */
+========================================================= */
 
 function openModal() {
 
@@ -1231,9 +1086,9 @@ function closeModal() {
 }
 
 
-/* =========================
+/* =========================================================
    REGISTRATION
-========================= */
+========================================================= */
 
 document
     .getElementById("gmscForm")
@@ -1245,20 +1100,11 @@ document
 
             const button =
                 document.getElementById(
-                    "registrationButton"
-                );
-
-            const message =
-                document.getElementById(
-                    "registrationMessage"
+                    "registrationSubmitButton"
                 );
 
             button.disabled = true;
-
-            button.textContent =
-                "REGISTERING...";
-
-            message.textContent = "";
+            button.textContent = "REGISTERING...";
 
             const formData =
                 new FormData(this);
@@ -1286,35 +1132,21 @@ document
                         }
                     );
 
-                let result;
-
-                try {
-
-                    result =
-                        await response.json();
-
-                } catch {
-
-                    result = {
-                        error:
-                            "Invalid server response."
-                    };
-
-                }
+                const result =
+                    await response.json();
 
                 if (!response.ok) {
 
-                    message.textContent =
+                    alert(
                         result.error ||
-                        "Registration failed.";
+                        "Registration failed."
+                    );
 
                     button.disabled = false;
-
                     button.textContent =
                         "SUBMIT REGISTRATION";
 
                     return;
-
                 }
 
                 document
@@ -1324,9 +1156,7 @@ document
                     .style.display = "none";
 
                 document
-                    .getElementById(
-                        "success"
-                    )
+                    .getElementById("success")
                     .style.display = "block";
 
                 document
@@ -1336,6 +1166,14 @@ document
                     .textContent =
                     result.code;
 
+                if (result.emailSent === false) {
+
+                    console.warn(
+                        "Registration saved, but notification email was not sent."
+                    );
+
+                }
+
             } catch (error) {
 
                 console.error(
@@ -1343,11 +1181,11 @@ document
                     error
                 );
 
-                message.textContent =
-                    "Unable to connect to the GMSC server.";
+                alert(
+                    "Unable to connect to the GMSC server."
+                );
 
                 button.disabled = false;
-
                 button.textContent =
                     "SUBMIT REGISTRATION";
 
@@ -1357,20 +1195,18 @@ document
     );
 
 
-/* =========================
+/* =========================================================
    TEST VARIABLES
-========================= */
+========================================================= */
 
 let testStarted = false;
-
 let testSubmitted = false;
-
 let currentRegistrationCode = "";
 
 
-/* =========================
-   START TEST
-========================= */
+/* =========================================================
+   BEGIN TEST
+========================================================= */
 
 async function beginTest() {
 
@@ -1386,7 +1222,7 @@ async function beginTest() {
 
     const button =
         document.getElementById(
-            "verifyTestButton"
+            "startTestButton"
         );
 
     const code =
@@ -1397,16 +1233,13 @@ async function beginTest() {
     if (!code) {
 
         message.textContent =
-            "Please enter your registration code.";
+            "Please enter your GMSC registration code.";
 
         return;
-
     }
 
     button.disabled = true;
-
-    button.textContent =
-        "VERIFYING...";
+    button.textContent = "VERIFYING...";
 
     try {
 
@@ -1421,29 +1254,14 @@ async function beginTest() {
                             "application/json"
                     },
 
-                    body:
-                        JSON.stringify({
-                            registration_code:
-                                code
-                        })
+                    body: JSON.stringify({
+                        registration_code: code
+                    })
                 }
             );
 
-        let result;
-
-        try {
-
-            result =
-                await response.json();
-
-        } catch {
-
-            result = {
-                error:
-                    "Invalid server response."
-            };
-
-        }
+        const result =
+            await response.json();
 
         if (!response.ok) {
 
@@ -1452,12 +1270,10 @@ async function beginTest() {
                 "Test verification failed.";
 
             button.disabled = false;
-
             button.textContent =
                 "VERIFY CODE & START TEST →";
 
             return;
-
         }
 
         if (!result.verified) {
@@ -1466,28 +1282,17 @@ async function beginTest() {
                 "Registration code could not be verified.";
 
             button.disabled = false;
-
             button.textContent =
                 "VERIFY CODE & START TEST →";
 
             return;
-
         }
-
-        /*
-          SAVE THE VERIFIED CODE.
-        */
 
         currentRegistrationCode =
             result.registrationCode;
 
         testStarted = true;
-
         testSubmitted = false;
-
-        /*
-          Hide login box.
-        */
 
         document
             .getElementById(
@@ -1495,28 +1300,19 @@ async function beginTest() {
             )
             .style.display = "none";
 
-        /*
-          Show test.
-        */
-
         document
             .getElementById(
                 "testArea"
             )
             .style.display = "block";
 
-        /*
-          Scroll to test.
-        */
-
-        document
-            .getElementById(
-                "testArea"
-            )
-            .scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
+        window.scrollTo({
+            top:
+                document
+                    .getElementById("testArea")
+                    .offsetTop - 80,
+            behavior: "smooth"
+        });
 
     } catch (error) {
 
@@ -1526,20 +1322,20 @@ async function beginTest() {
         );
 
         message.textContent =
-            "Unable to connect to the test server.";
+            "Unable to connect to the test server. Please try again.";
 
         button.disabled = false;
-
         button.textContent =
             "VERIFY CODE & START TEST →";
+
     }
 
 }
 
 
-/* =========================
+/* =========================================================
    SUBMIT TEST
-========================= */
+========================================================= */
 
 async function submitTest(reason) {
 
@@ -1547,9 +1343,7 @@ async function submitTest(reason) {
         !testStarted ||
         testSubmitted
     ) {
-
         return;
-
     }
 
     const form =
@@ -1557,35 +1351,36 @@ async function submitTest(reason) {
             "testForm"
         );
 
-    /*
-      Browser validation for
-      manual submission.
-    */
-
     if (
-        reason ===
-        "Student manually submitted the test."
-        &&
         !form.checkValidity()
     ) {
 
-        form.reportValidity();
+        if (
+            reason ===
+            "Student manually submitted the test."
+        ) {
+
+            form.reportValidity();
+
+        }
 
         return;
-
     }
 
     testSubmitted = true;
 
-    const submitButton =
+    const button =
         document.getElementById(
             "submitTestButton"
         );
 
-    submitButton.disabled = true;
+    if (button) {
 
-    submitButton.textContent =
-        "SUBMITTING...";
+        button.disabled = true;
+        button.textContent =
+            "SUBMITTING...";
+
+    }
 
     const answers =
         Object.fromEntries(
@@ -1617,27 +1412,12 @@ async function submitTest(reason) {
                             reason:
                                 reason
 
-                        }),
-
-                    keepalive: true
+                        })
                 }
             );
 
-        let result;
-
-        try {
-
-            result =
-                await response.json();
-
-        } catch {
-
-            result = {
-                error:
-                    "Invalid server response."
-            };
-
-        }
+        const result =
+            await response.json();
 
         if (!response.ok) {
 
@@ -1648,10 +1428,13 @@ async function submitTest(reason) {
 
             testSubmitted = false;
 
-            submitButton.disabled = false;
+            if (button) {
 
-            submitButton.textContent =
-                "SUBMIT TEST";
+                button.disabled = false;
+                button.textContent =
+                    "SUBMIT TEST";
+
+            }
 
             alert(
                 result.error ||
@@ -1659,41 +1442,15 @@ async function submitTest(reason) {
             );
 
             return;
-
         }
 
-        /*
-          Hide test form.
-        */
-
-        form.style.display =
-            "none";
-
-        /*
-          Hide warning boxes inside test area.
-        */
-
-        document
-            .querySelectorAll(
-                "#testArea .test-warning"
-            )
-            .forEach(
-                function(element) {
-                    element.style.display =
-                        "none";
-                }
-            );
-
-        /*
-          Show success.
-        */
+        form.style.display = "none";
 
         document
             .getElementById(
                 "testSuccess"
             )
-            .style.display =
-            "block";
+            .style.display = "block";
 
         document
             .getElementById(
@@ -1711,10 +1468,13 @@ async function submitTest(reason) {
 
         testSubmitted = false;
 
-        submitButton.disabled = false;
+        if (button) {
 
-        submitButton.textContent =
-            "SUBMIT TEST";
+            button.disabled = false;
+            button.textContent =
+                "SUBMIT TEST";
+
+        }
 
         alert(
             "Unable to connect to the test server."
@@ -1725,9 +1485,9 @@ async function submitTest(reason) {
 }
 
 
-/* =========================
+/* =========================================================
    MANUAL TEST SUBMISSION
-========================= */
+========================================================= */
 
 document
     .getElementById(
@@ -1747,9 +1507,9 @@ document
     );
 
 
-/* =========================
-   LEAVING TEST PAGE
-========================= */
+/* =========================================================
+   AUTOMATIC SUBMISSION IF STUDENT LEAVES
+========================================================= */
 
 document.addEventListener(
     "visibilitychange",
@@ -1761,6 +1521,11 @@ document.addEventListener(
             !testSubmitted
         ) {
 
+            /*
+              The server still controls whether
+              the test can actually be submitted.
+            */
+
             submitTest(
                 "Student left or switched away from the test page."
             );
@@ -1770,85 +1535,10 @@ document.addEventListener(
     }
 );
 
-
-/* =========================
-   STATUS CHECK
-========================= */
-
-async function checkStatus() {
-
-    try {
-
-        const response =
-            await fetch(
-                "/api/status"
-            );
-
-        if (!response.ok) {
-
-            return;
-
-        }
-
-        const status =
-            await response.json();
-
-        const button =
-            document.getElementById(
-                "verifyTestButton"
-            );
-
-        const message =
-            document.getElementById(
-                "testLoginMessage"
-            );
-
-        /*
-          The server is the authority.
-        */
-
-        if (status.testOpen === true) {
-
-            button.disabled = false;
-
-            button.textContent =
-                "VERIFY CODE & START TEST →";
-
-            message.textContent =
-                "";
-
-        } else {
-
-            button.disabled = false;
-
-            button.textContent =
-                "TEST CLOSED";
-
-            message.textContent =
-                "The GMSC test is available only on 21 November 2026.";
-
-        }
-
-    } catch (error) {
-
-        console.error(
-            "Status check failed:",
-            error
-        );
-
-    }
-
-}
-
-
-/* =========================
-   INITIAL STATUS CHECK
-========================= */
-
-checkStatus();
-
 </script>
 
 </body>
 </html>
 ```
+
+
