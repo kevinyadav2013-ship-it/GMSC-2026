@@ -129,6 +129,45 @@ Father's Name: ${father_name}
   res.status(201).json({
     code: code
   });
+  app.post("/api/test/submit", async (req, res) => {
+  const registration_code = String(req.body.registration_code || "").trim();
+  const answers = req.body.answers || {};
+  const reason = String(req.body.reason || "Student submitted test");
+
+  if (!registration_code) {
+    return res.status(400).json({
+      error: "Registration code is required."
+    });
+  }
+
+  const registration = db.prepare(`
+    SELECT code
+    FROM registrations
+    WHERE code = ?
+  `).get(registration_code);
+
+  if (!registration) {
+    return res.status(403).json({
+      error: "Invalid registration code."
+    });
+  }
+
+  db.prepare(`
+    INSERT INTO test_submissions
+    (registration_code, answers, reason, submitted_at)
+    VALUES (?, ?, ?, ?)
+  `).run(
+    registration_code,
+    JSON.stringify(answers),
+    reason,
+    new Date().toISOString()
+  );
+
+  res.status(201).json({
+    success: true,
+    message: "Test submitted successfully."
+  });
+});
 });
 
 app.get("/api/status", (req, res) => {
