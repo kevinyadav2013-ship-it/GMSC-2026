@@ -95,6 +95,12 @@ function makeCode() {
   );
 }
 
+/*
+  TEST IS OPEN ONLY ON
+  21 NOVEMBER 2026
+  INDIA TIME.
+*/
+
 function isTestOpen() {
   const now = new Date();
 
@@ -102,7 +108,11 @@ function isTestOpen() {
     "2026-11-21T00:00:00+05:30"
   );
 
-  return now >= testStart;
+  const testEnd = new Date(
+    "2026-11-22T00:00:00+05:30"
+  );
+
+  return now >= testStart && now < testEnd;
 }
 
 /* =========================
@@ -207,15 +217,12 @@ app.post(
           });
 
         }
-
       }
-
     }
 
     /*
-      IMPORTANT:
-      Send the code to the browser immediately.
-      Do NOT wait for Gmail.
+      Return the registration code immediately.
+      Email does not delay registration.
     */
 
     res.status(201).json({
@@ -224,7 +231,7 @@ app.post(
     });
 
     /*
-      Email runs in the background.
+      Send email in background.
     */
 
     transporter
@@ -273,7 +280,6 @@ ${father_name}
         );
 
       });
-
   }
 );
 
@@ -287,15 +293,15 @@ app.post(
   (req, res) => {
 
     /*
-      TEST IS NOT AVAILABLE BEFORE
-      21 NOVEMBER 2026.
+      Test is ONLY available
+      on 21 November 2026.
     */
 
     if (!isTestOpen()) {
 
       return res.status(403).json({
         error:
-          "The GMSC test will open on 21 November 2026."
+          "The GMSC test is available only on 21 November 2026."
       });
 
     }
@@ -350,7 +356,6 @@ app.post(
         registration.class
 
     });
-
   }
 );
 
@@ -364,14 +369,15 @@ app.post(
   (req, res) => {
 
     /*
-      TEST MUST BE OPEN.
+      Test is ONLY available
+      on 21 November 2026.
     */
 
     if (!isTestOpen()) {
 
       return res.status(403).json({
         error:
-          "The GMSC test will open on 21 November 2026."
+          "The GMSC test is available only on 21 November 2026."
       });
 
     }
@@ -450,7 +456,8 @@ app.post(
       });
 
       /*
-        Email in background.
+        Send submission email
+        in the background.
       */
 
       transporter
@@ -466,7 +473,7 @@ app.post(
             `GMSC Test Submission - ${registration_code}`,
 
           text: `
-New GMSC test submission.
+New GMSC test submission received.
 
 Registration Code:
 ${registration_code}
@@ -480,7 +487,7 @@ ${registration.email}
 Class:
 ${registration.class}
 
-Reason:
+Submission Reason:
 ${reason}
 
 Answers:
@@ -490,12 +497,11 @@ ${JSON.stringify(
   2
 )}
 `
-
         })
         .then(() => {
 
           console.log(
-            "Test submission email sent."
+            "Test submission email sent successfully."
           );
 
         })
@@ -519,9 +525,7 @@ ${JSON.stringify(
         error:
           "Test submission could not be completed."
       });
-
     }
-
   }
 );
 
@@ -542,11 +546,12 @@ app.get(
         "2026-10-31T23:59:59+05:30"
       );
 
+    /*
+      TRUE ONLY ON 21 NOVEMBER.
+    */
+
     const testOpen =
-      now >=
-      new Date(
-        "2026-11-21T00:00:00+05:30"
-      );
+      isTestOpen();
 
     const resultsAvailable =
       now >=
@@ -566,7 +571,6 @@ app.get(
       resultsAvailable
 
     });
-
   }
 );
 
@@ -584,7 +588,6 @@ app.get(
         root: "public"
       }
     );
-
   }
 );
 
