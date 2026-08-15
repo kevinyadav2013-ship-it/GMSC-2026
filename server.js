@@ -4,7 +4,8 @@ import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import Database from "better-sqlite3";
 
-const app = express();
+const app = express(); 
+app.set("trust proxy", 1);
 const db = new Database("gmsc.sqlite");
 
 app.use(helmet({ contentSecurityPolicy: false }));
