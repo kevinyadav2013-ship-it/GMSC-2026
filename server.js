@@ -40,7 +40,6 @@ CREATE TABLE IF NOT EXISTS test_submissions (
   submitted_at TEXT NOT NULL
 );
 `);
-`);
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
