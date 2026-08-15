@@ -1,10 +1,18 @@
-import "dotenv/config";
+import "dotenv/config"; 
+import nodemailer from "nodemailer";
 import express from "express";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import Database from "better-sqlite3";
 
 const app = express(); 
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.GMSC_EMAIL,
+    pass: process.env.GMSC_EMAIL_PASSWORD
+  }
+});
 app.set("trust proxy", 1);
 const db = new Database("gmsc.sqlite");
 
@@ -94,7 +102,21 @@ app.post("/api/register", limiter, (req, res) => {
       }
     }
   }
+await transporter.sendMail({
+  from: process.env.GMSC_EMAIL,
+  to: process.env.GMSC_EMAIL,
+  subject: `New GMSC Registration - ${code}`,
+  text: `
+New GMSC registration received.
 
+Registration Code: ${code}
+Student Name: ${student_name}
+Student Email: ${email}
+Mobile: ${mobile}
+Class: ${className}
+Father's Name: ${father_name}
+`
+});
   res.status(201).json({
     code: code
   });
