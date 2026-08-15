@@ -31,6 +31,15 @@ CREATE TABLE IF NOT EXISTS registrations (
   father_name TEXT NOT NULL,
   created_at TEXT NOT NULL
 );
+db.exec(`
+CREATE TABLE IF NOT EXISTS test_submissions (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  registration_code TEXT NOT NULL,
+  answers TEXT NOT NULL,
+  reason TEXT NOT NULL,
+  submitted_at TEXT NOT NULL
+);
+`);
 `);
 
 const limiter = rateLimit({
